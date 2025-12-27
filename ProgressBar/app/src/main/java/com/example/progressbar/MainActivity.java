@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
         ButtonClickListener3 buttonClickListener3 = new ButtonClickListener3();
         activityMainBinding.button3.setOnClickListener(buttonClickListener3);
-        
+
         ButtonClickListener4 buttonClickListener4 = new ButtonClickListener4();
         activityMainBinding.button4.setOnClickListener(buttonClickListener4);
     }
