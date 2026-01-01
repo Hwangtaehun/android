@@ -3,13 +3,13 @@ plugins {
 }
 
 android {
-    namespace = "com.example.floatingactionbutton"
+    namespace = "com.example.calendarview"
     compileSdk {
         version = release(36)
     }
 
     defaultConfig {
-        applicationId = "com.example.floatingactionbutton"
+        applicationId = "com.example.calendarview"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
