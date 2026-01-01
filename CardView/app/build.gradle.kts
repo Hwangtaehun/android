@@ -3,14 +3,14 @@ plugins {
 }
 
 android {
-    namespace = "com.example.scrollview"
+    namespace = "com.example.cardview"
     compileSdk {
         version = release(36)
     }
 
     defaultConfig {
-        applicationId = "com.example.scrollview"
-        minSdk = 24
+        applicationId = "com.example.cardview"
+        minSdk = 23
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -30,10 +30,6 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
-    }
-
-    viewBinding {
-        enable = true;
     }
 }
 
