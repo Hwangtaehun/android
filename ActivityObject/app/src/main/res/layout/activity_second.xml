@@ -6,18 +6,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity" >
+    tools:context=".SecondActivity">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="TextView"
         android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/button2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="SecondActivity 실행" />
+        android:text="Activity 종료" />
 </LinearLayout>
