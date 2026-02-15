@@ -72,7 +72,7 @@ public class SubFragment extends Fragment {
         Log.d("test", "onPause");
     }
 
-    // Fragment가 정지 될 때
+    // Fragment가 정지될 때
     @Override
     public void onStop() {
         super.onStop();
