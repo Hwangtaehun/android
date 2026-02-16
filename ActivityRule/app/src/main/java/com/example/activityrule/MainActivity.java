@@ -39,11 +39,13 @@ public class MainActivity extends AppCompatActivity {
         // 이름을 기준으로 분기한다.
         switch (name) {
             case INPUT_FRAGMENT:
-                InputFragment inputFragment = InputFragment.newInstance();
+                //InputFragment inputFragment = InputFragment.newInstance();
+                InputFragment inputFragment = new InputFragment();
                 fragmentTransaction.replace(R.id.fragmentContainerView, inputFragment);
                 break;
             case RESULT_FRAGMENT:
-                ResultFragment resultFragment = ResultFragment.newInstance(edit1Value, edit2Value);
+                //ResultFragment resultFragment = ResultFragment.newInstance(edit1Value, edit2Value);
+                ResultFragment resultFragment = new ResultFragment();
                 fragmentTransaction.replace(R.id.fragmentContainerView, resultFragment);
                 break;
         }

@@ -15,12 +15,12 @@ public class InputFragment extends Fragment {
     MainActivity mainActivity;
 
     // TODO: Rename and change types and number of parameters
-    public static InputFragment newInstance() {
-        InputFragment fragment = new InputFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
+//    public static InputFragment newInstance() {
+//        InputFragment fragment = new InputFragment();
+//        Bundle args = new Bundle();
+//        fragment.setArguments(args);
+//        return fragment;
+//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
