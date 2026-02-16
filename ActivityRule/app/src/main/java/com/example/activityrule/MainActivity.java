@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
                 fragmentTransaction.replace(R.id.fragmentContainerView, inputFragment);
                 break;
             case RESULT_FRAGMENT:
-                ResultFragment resultFragment = ResultFragment.newInstance();
+                ResultFragment resultFragment = ResultFragment.newInstance(edit1Value, edit2Value);
                 fragmentTransaction.replace(R.id.fragmentContainerView, resultFragment);
                 break;
         }

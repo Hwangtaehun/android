@@ -15,9 +15,12 @@ public class ResultFragment extends Fragment {
     MainActivity mainActivity;
 
     // TODO: Rename and change types and number of parameters
-    public static ResultFragment newInstance() {
+    public static ResultFragment newInstance(String value1, String value2) {
         ResultFragment fragment = new ResultFragment();
         Bundle args = new Bundle();
+        args.putString("value1", value1);
+        args.putString("value2", value2);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -30,8 +33,15 @@ public class ResultFragment extends Fragment {
         fragmentResultBinding = FragmentResultBinding.inflate(inflater);
 
         // MainActivity의 변수에 저장되어 있는 값을 TextView에 설정한다.
-        fragmentResultBinding.textView.setText(mainActivity.edit1Value);
-        fragmentResultBinding.textView2.setText(mainActivity.edit2Value);
+        // fragmentResultBinding.textView.setText(mainActivity.edit1Value);
+        // fragmentResultBinding.textView2.setText(mainActivity.edit2Value);
+
+        Bundle args = getArguments();
+        String str1 = args.getString("value1");
+        String str2 = args.getString("value2");
+
+        fragmentResultBinding.textView.setText(str1);
+        fragmentResultBinding.textView2.setText(str2);
 
         return fragmentResultBinding.getRoot();
     }
