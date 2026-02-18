@@ -13,11 +13,11 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String sql = "create table MemeTable "
+        String sql = "create table MemoTable "
                    + "(memo_idx integer primary key autoincrement, "
                    + "memo_subject text not null, "
                    + "memo_text text not null, "
-                   + "memo_data data not null)";
+                   + "memo_date date not null)";
 
         db.execSQL(sql);
     }
