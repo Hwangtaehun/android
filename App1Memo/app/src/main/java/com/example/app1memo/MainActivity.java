@@ -140,6 +140,17 @@ public class MainActivity extends AppCompatActivity {
         public ViewHolderClass onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             MainRecylcerRowBinding mainRecylcerRowBinding = MainRecylcerRowBinding.inflate(getLayoutInflater());
             ViewHolderClass viewHolderClass = new ViewHolderClass(mainRecylcerRowBinding);
+
+            // 생서되는 항목 View의 가로 세로 길이을 설정해준다.
+            RecyclerView.LayoutParams layoutParams = new RecyclerView.LayoutParams(
+                    RecyclerView.LayoutParams.MATCH_PARENT,
+                    RecyclerView.LayoutParams.WRAP_CONTENT
+            );
+            mainRecylcerRowBinding.getRoot().setLayoutParams(layoutParams);
+
+            // 클릭 리스너 설정
+            mainRecylcerRowBinding.getRoot().setOnClickListener(viewHolderClass);
+
             return viewHolderClass;
         }
 
@@ -158,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // HolderClass
-        class ViewHolderClass extends RecyclerView.ViewHolder {
+        class ViewHolderClass extends RecyclerView.ViewHolder implements View.OnClickListener {
             TextView mainRecyclerSubject;
             TextView mainRecyclerDate;
 
@@ -167,6 +178,14 @@ public class MainActivity extends AppCompatActivity {
 
                 mainRecyclerSubject = mainRecylcerRowBinding.mainRecyclerSubject;
                 mainRecyclerDate = mainRecylcerRowBinding.mainRecyclerDate;
+            }
+
+            @Override
+            public void onClick(View v) {
+                // MemoReadActivity를 실행해 준다.
+                Intent memoReadIntent = new Intent(MainActivity.this, MemoReadActivity.class);
+                startActivity(memoReadIntent);
+
             }
         }
     }
