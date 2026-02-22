@@ -97,8 +97,10 @@ public class MemoReadActivity extends AppCompatActivity {
         if(itemId == android.R.id.home) {
             finish();
         } else if(itemId == R.id.read_menu_modify) { // 글 수정
-
+            Intent memoModifyIntent = new Intent(this, MemoModifyActivity.class);
+            startActivity(memoModifyIntent);
         } else if(itemId == R.id.read_menu_delete) { // 글 삭제
+
         }
 
         return super.onOptionsItemSelected(item);

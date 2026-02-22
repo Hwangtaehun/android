@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.App1Memo">
         <activity
+            android:name=".MemoModifyActivity"
+            android:exported="false" />
+        <activity
             android:name=".MemoReadActivity"
             android:exported="false" />
         <activity
