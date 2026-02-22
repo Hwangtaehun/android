@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<String> subjectList = new ArrayList<String>();
     // 작성 날짜를 담을 ArrayList
     ArrayList<String> dateList = new ArrayList<String>();
+    // 메모의 번호를 담을 ArrayList
+    ArrayList<Integer> idxList = new ArrayList<Integer>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,13 +75,14 @@ public class MainActivity extends AppCompatActivity {
         // ArrayList를 비워준다.
         subjectList.clear();
         dateList.clear();
+        idxList.clear();
 
         // 데이터 베이스 오픈
         DBHelper helper = new DBHelper(this);
         SQLiteDatabase sqLiteDatabase = helper.getWritableDatabase();
 
         // 쿼리문
-        String sql = "select memo_subject, memo_date from MemoTable "
+        String sql = "select memo_subject, memo_date, memo_idx from MemoTable "
                    + "order by memo_idx desc";
 
         // 데이터를 가져온다.
@@ -89,10 +92,12 @@ public class MainActivity extends AppCompatActivity {
             // 컬럼 index를 가져온다.
             int idx1 = c1.getColumnIndex("memo_subject");
             int idx2 = c1.getColumnIndex("memo_date");
+            int idx3 = c1.getColumnIndex("memo_idx");
 
             // 데이터를 가져온다.
             String memoSubject = c1.getString(idx1);
             String memoDate = c1.getString(idx2);
+            int memoIdx = c1.getInt(idx3);
 
             //Log.d("memo_app", memoSubject);
             //Log.d("memo_app", memoDate);
@@ -101,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
             // 데이터를 담는다.
             subjectList.add(memoSubject);
             dateList.add(memoDate);
+            idxList.add(memoIdx);
         }
 
         sqLiteDatabase.close();
@@ -184,8 +190,15 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // MemoReadActivity를 실행해 준다.
                 Intent memoReadIntent = new Intent(MainActivity.this, MemoReadActivity.class);
-                startActivity(memoReadIntent);
 
+                // 사용자가 터치한 항목의 순서값을 가져온다.
+                int adapterPosition = getBindingAdapterPosition();
+                // 항목 번째의 메모 인덱스 번호를 가져온다.
+                int memoIdx = idxList.get(adapterPosition);
+                // Intent에 담는다.
+                memoReadIntent.putExtra("memo_idx", memoIdx);
+
+                startActivity(memoReadIntent);
             }
         }
     }

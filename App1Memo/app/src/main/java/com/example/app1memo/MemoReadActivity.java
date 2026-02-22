@@ -1,5 +1,8 @@
 package com.example.app1memo;
 
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -35,6 +38,47 @@ public class MemoReadActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Intent를 추출한다.
+        Intent intent = getIntent();
+        // 메모 번호를 추출한다.
+        Integer memoIdx = intent.getIntExtra("memo_idx", 0);
+
+        // 데이터 베이스 오픈
+        DBHelper dbHelper = new DBHelper(this);
+        SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
+
+        // 쿼리문
+        String sql = "select memo_subject, memo_date, memo_text "
+                   + "from MemoTable "
+                   + "where memo_idx = ?";
+
+        // ? 에 바인딩 될 값
+        String [] args = {memoIdx.toString()};
+
+        // 쿼리 실행
+        Cursor c1 = sqLiteDatabase.rawQuery(sql, args);
+        c1.moveToNext();
+
+        // 글 데이터를 추출한다.
+        int idx1 = c1.getColumnIndex("memo_subject");
+        int idx2 = c1.getColumnIndex("memo_date");
+        int idx3 = c1.getColumnIndex("memo_text");
+
+        String memoSubject = c1.getString(idx1);
+        String memoDate = c1.getString(idx2);
+        String memoText = c1.getString(idx3);
+
+        sqLiteDatabase.close();
+
+        activityMemoReadBinding.memoReadSubject.setText(memoSubject);
+        activityMemoReadBinding.memoReadDate.setText(memoDate);
+        activityMemoReadBinding.memoReadText.setText(memoText);
     }
 
     @Override
