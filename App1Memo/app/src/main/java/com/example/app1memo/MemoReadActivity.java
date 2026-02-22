@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import androidx.activity.EdgeToEdge;
@@ -82,13 +84,21 @@ public class MemoReadActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.read_menu, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
 
-        switch (itemId){
-            case android.R.id.home:
-                finish();
-                break;
+        if(itemId == android.R.id.home) {
+            finish();
+        } else if(itemId == R.id.read_menu_modify) { // 글 수정
+
+        } else if(itemId == R.id.read_menu_delete) { // 글 삭제
         }
 
         return super.onOptionsItemSelected(item);
