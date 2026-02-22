@@ -1,5 +1,6 @@
 package com.example.app1memo;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,6 +12,7 @@ import android.view.MenuItem;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -106,9 +108,40 @@ public class MemoReadActivity extends AppCompatActivity {
 
             startActivity(memoModifyIntent);
         } else if(itemId == R.id.read_menu_delete) { // 글 삭제
+            // 다이얼로그를 띄운다.
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("메모 삭제");
+            builder.setMessage("메모를 삭제 하겠습니까?");
 
+            DeleteDialogListener deleteDialogListener = new DeleteDialogListener();
+            builder.setPositiveButton("삭제", deleteDialogListener);
+            builder.setNegativeButton("취소", null);
+
+            builder.show();
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    // 다이얼로그의 리스너
+    class DeleteDialogListener implements DialogInterface.OnClickListener {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            DBHelper dbHelper = new DBHelper(MemoReadActivity.this);
+            SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
+
+            String sql = "delete from MemoTable "
+                       + "where memo_idx = ?";
+
+            Intent intent1 = getIntent();
+            Integer memoIdx = intent1.getIntExtra("memo_idx", 0);
+
+            String [] args = {memoIdx.toString()};
+
+            sqLiteDatabase.execSQL(sql, args);
+            sqLiteDatabase.close();
+
+            finish();
+        }
     }
 }

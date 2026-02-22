@@ -5,6 +5,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 
@@ -95,10 +97,38 @@ public class MemoModifyActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.modify_menu, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
 
         if(itemId == android.R.id.home) {
+            finish();
+        } else if(itemId == R.id.memo_modify_save) {
+            // 메모 수정 완료
+            DBHelper dbHelper = new DBHelper(this);
+            SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
+
+            String sql = "update MemoTable "
+                       + "set memo_subject = ?, memo_text = ? "
+                       + "where memo_idx = ?";
+
+            String memoSubject = activityMemoModifyBinding.memoModifySubject.getText().toString();
+            String memoText = activityMemoModifyBinding.memoModifyText.getText().toString();
+
+            Intent intent1 = getIntent();
+            Integer memoIdx = intent1.getIntExtra("memo_idx", 0);
+
+            String [] args = {memoSubject, memoText, memoIdx.toString()};
+
+            sqLiteDatabase.execSQL(sql, args);
+            sqLiteDatabase.close();
+
             finish();
         }
 
