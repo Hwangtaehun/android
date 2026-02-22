@@ -98,6 +98,12 @@ public class MemoReadActivity extends AppCompatActivity {
             finish();
         } else if(itemId == R.id.read_menu_modify) { // 글 수정
             Intent memoModifyIntent = new Intent(this, MemoModifyActivity.class);
+
+            // 메모 번호를 추출하여 Intent에 담아준다.
+            Intent intent1 = getIntent();
+            int memoIdx = intent1.getIntExtra("memo_idx", 0);
+            memoModifyIntent.putExtra("memo_idx", memoIdx);
+
             startActivity(memoModifyIntent);
         } else if(itemId == R.id.read_menu_delete) { // 글 삭제
 
