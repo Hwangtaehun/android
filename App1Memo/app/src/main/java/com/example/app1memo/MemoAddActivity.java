@@ -71,11 +71,11 @@ public class MemoAddActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     // 제목에 포커스를 준다.
-                    activityMemoAddBinding.addMenoSubject.requestFocus();
+                    activityMemoAddBinding.addMemoSubject.requestFocus();
 
                     // 키보드를 올려준다.
                     InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                    inputMethodManager.showSoftInput(activityMemoAddBinding.addMenoSubject, InputMethodManager.SHOW_FORCED);
+                    inputMethodManager.showSoftInput(activityMemoAddBinding.addMemoSubject, InputMethodManager.SHOW_FORCED);
                 }
             });
         }
@@ -98,19 +98,19 @@ public class MemoAddActivity extends AppCompatActivity {
             finish();
         } else if (itemId == R.id.add_menu_save) { // 저장 버튼
             // 사용자가 입력한 내용을 가지고 온다.
-            String memoSubject = activityMemoAddBinding.addMenoSubject.getText().toString();
-            String memoText = activityMemoAddBinding.addMenoText.getText().toString();
+            String memoSubject = activityMemoAddBinding.addMemoSubject.getText().toString();
+            String memoText = activityMemoAddBinding.addMemoText.getText().toString();
 
             // 쿼리문
-            String sql = "insert into MemoTable"
-                       + "(memo_subject, memo_text, memo_data) "
-                       + "values (?, ?, ?)";
+            String sql = "insert into MemoTable "
+                    + "(memo_subject, memo_text, memo_date) "
+                    + "values (?, ?, ?)";
 
             // 현재 시간을 구한다.
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
             String now = simpleDateFormat.format(new Date());
 
-            // 데이터 베이스 오픈
+            // 데이터베이스 오픈
             DBHelper dbHelper = new DBHelper(this);
 
             // 저장할 값 배열

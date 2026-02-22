@@ -17,7 +17,7 @@
         android:theme="?attr/actionBarTheme" />
 
     <EditText
-        android:id="@+id/add_meno_subject"
+        android:id="@+id/add_memo_subject"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -25,7 +25,7 @@
         android:inputType="text" />
 
     <EditText
-        android:id="@+id/add_meno_text"
+        android:id="@+id/add_memo_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
