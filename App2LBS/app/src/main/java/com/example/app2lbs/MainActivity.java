@@ -11,6 +11,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.app2lbs.databinding.ActivityMainBinding;
+import com.google.android.gms.maps.MapsInitializer;
 
 public class MainActivity extends AppCompatActivity {
     ActivityMainBinding activityMainBinding;
@@ -23,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
         SplashScreen.installSplashScreen(this);
 
         // SystemClock.sleep(5000);
+
+        MapsInitializer.initialize(this, MapsInitializer.Renderer.LATEST, null);
 
         activityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(activityMainBinding.getRoot());
