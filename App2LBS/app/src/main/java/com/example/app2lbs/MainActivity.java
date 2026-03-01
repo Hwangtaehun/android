@@ -33,6 +33,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MainActivity extends AppCompatActivity {
@@ -53,6 +54,9 @@ public class MainActivity extends AppCompatActivity {
     // 위치 측정을 하면 반응하는 리스너
     MyLocationListener myLocationListener;
 
+    // 사용자 위치를 표시하는 마커 객체
+    Marker myMarker;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +70,9 @@ public class MainActivity extends AppCompatActivity {
 
         activityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(activityMainBinding.getRoot());
+
+        setSupportActionBar(activityMainBinding.mainToolbar);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -165,11 +172,17 @@ public class MainActivity extends AppCompatActivity {
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(loc1);
 
+        // 표시되어 있는 마커가 있다면 제거한다.
+        if(myMarker != null){
+            myMarker.remove();
+            myMarker = null;
+        }
+
         // 마커의 이미지를 변경한다.
         BitmapDescriptor markerBitmap = BitmapDescriptorFactory.fromResource(R.drawable.my_location);
         markerOptions.icon(markerBitmap);
 
-        mainGoogleMap.addMarker(markerOptions);
+        myMarker = mainGoogleMap.addMarker(markerOptions);
     }
 
     // 위치측정이 성공하면 반응하는 리스너
