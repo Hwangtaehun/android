@@ -1,6 +1,7 @@
 package com.example.app2lbs;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.location.Location;
@@ -37,6 +38,16 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     ActivityMainBinding activityMainBinding;
@@ -86,6 +97,13 @@ public class MainActivity extends AppCompatActivity {
 
     // 현재 위치
     Location myLocation;
+
+    // 정보를 담을 ArrayList
+    ArrayList<Double> nearbyLatList = new ArrayList<Double>();
+    ArrayList<Double> nearbyLngList = new ArrayList<Double>();
+    ArrayList<String> nearbyNameList = new ArrayList<String>();
+    ArrayList<String> nearbyVicinityList = new ArrayList<String>();
+    ArrayList<Marker> nearbyMarkerList = new ArrayList<Marker>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -269,11 +287,171 @@ public class MainActivity extends AppCompatActivity {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("장소 종류 선택");
             builder.setNegativeButton("취소", null);
-            builder.setNeutralButton("초기화", null);
-            builder.setItems(dialogData, null);
+
+            NeutralButtonClickListener neutralButtonClickListener = new NeutralButtonClickListener();
+            builder.setNeutralButton("초기화", neutralButtonClickListener);
+
+            DialongItemClickListener dialongItemClickListener = new DialongItemClickListener();
+            builder.setItems(dialogData, dialongItemClickListener);
             builder.show();
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    // Neutral Button Listener
+    class NeutralButtonClickListener implements DialogInterface.OnClickListener {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            initNearbyData();
+        }
+    }
+
+    // Dialog Item Click Listener
+    class DialongItemClickListener implements DialogInterface.OnClickListener {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            // 초기화
+            initNearbyData();
+            // 쓰레드 가동
+            NearbyPlaceThread nearbyPlaceThread = new NearbyPlaceThread(dialogData[which]);
+            nearbyPlaceThread.start();
+        }
+    }
+
+    // Place API Thread
+    class NearbyPlaceThread extends Thread {
+
+        private String type;
+
+        public NearbyPlaceThread(String type) {
+            this.type = type;
+        }
+
+        @Override
+        public void run() {
+            super.run();
+            try {
+                // 현재 위치를 가져온다.
+                double myLat = myLocation.getLatitude();
+                double myLng = myLocation.getLongitude();
+
+                // 요청 주소
+                String site = "https://maps.googleapis.com/maps/api/place/nearbysearch/json" +
+                        "?location="+ myLat + "," + myLng +
+                        "&radius=1000" +
+                        "&language=ko" +
+                        "&type=" + type +
+                        "&key=AIzaSyClrhd-rr2Ie4BBN5c0tD1fo886TtfdsRc";
+
+                // Log.d("app2 map", site);
+
+                // 요청
+                URL url = new URL(site);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                InputStream inputStream = httpURLConnection.getInputStream();
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+                // 문자열 데이터를 받아온다.
+                String str = null;
+                StringBuffer stringBuffer = new StringBuffer();
+
+                do {
+                    // 읽어온다.
+                    str = bufferedReader.readLine();
+
+                    if(str != null) {
+                        stringBuffer.append(str);
+                    }
+                } while (str != null);
+
+                String data = stringBuffer.toString();
+                // Log.d("app2 map", data);
+
+                // JSON 데이터를 받아온다.
+                JSONObject root = new JSONObject(data);
+
+                // status 값을 가져온다.
+                String status = root.getString("status");
+                //Log.d("app2 map", status);
+
+                // OK 라면
+                if(status.equals("OK")) {
+                    // 장소 데이터들을 가져온다.
+                    JSONArray resultsArray = root.getJSONArray("results");
+
+                    // 장소 데이터의 수 만큼 반복한다.
+                    for (int i = 0; i < resultsArray.length(); i++) {
+                        // i 번째 객체를 가져온다.
+                        JSONObject resultObject = resultsArray.getJSONObject(i);
+
+                        // 위도, 경도
+                        JSONObject geometryObject = resultObject.getJSONObject("geometry");
+                        JSONObject locationObject = geometryObject.getJSONObject("location");
+                        Double lat = locationObject.getDouble("lat");
+                        Double lng = locationObject.getDouble("lng");
+
+                        // 이름
+                        String name = resultObject.getString("name");
+
+                        // 대략적인 주소
+                        String vicinity = resultObject.getString("vicinity");
+
+//                        Log.d("app2 map", lat.toString());
+//                        Log.d("app2 map", lng.toString());
+//                        Log.d("app2 map", name);
+//                        Log.d("app2 map", vicinity);
+//                        Log.d("app2 map", "--------------------------------");
+
+                        // 리스트에 담는다.
+                        nearbyLatList.add(lat);
+                        nearbyLngList.add(lng);
+                        nearbyNameList.add(name);
+                        nearbyVicinityList.add(vicinity);
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                // 데이터의 수 만큼 반복한다.
+                                for (int k = 0; k < nearbyLatList.size(); k++) {
+                                    // k 번째 정보를 가져온다.
+                                    double lat2 = nearbyLatList.get(k);
+                                    double lng2 = nearbyLngList.get(k);
+                                    String name2 = nearbyNameList.get(k);
+                                    String vicinity2 = nearbyVicinityList.get(k);
+
+                                    MarkerOptions placeMarkerOptions = new MarkerOptions();
+                                    LatLng loc2 = new LatLng(lat2, lng2);
+                                    placeMarkerOptions.position(loc2);
+                                    placeMarkerOptions.title(name2);
+                                    placeMarkerOptions.snippet(vicinity2);
+
+                                    Marker placeMarker = mainGoogleMap.addMarker(placeMarkerOptions);
+                                    nearbyMarkerList.add(placeMarker);
+                                }
+                            }
+                        });
+                    }
+                }
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // 초기화
+    public void initNearbyData() {
+        // 지도에서 마커를 제거한다.
+        for (Marker marker : nearbyMarkerList) {
+            marker.remove();
+        }
+
+        nearbyLatList.clear();
+        nearbyLngList.clear();
+        nearbyNameList.clear();
+        nearbyVicinityList.clear();
+        nearbyMarkerList.clear();
     }
 }

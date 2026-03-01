@@ -1,15 +1,16 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.App2LBS" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+    <!-- 실제 앱 테마 -->
+    <style name="Theme.App2LBS" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
-    <!-- Splash screen -->
-    <style name="AppTheme.Splash" parent="Theme.SplashScreen">
+
+    <!-- 스플래시 전용 테마 -->
+    <style name="Theme.App2LBS.Splash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/white</item>
         <item name="windowSplashScreenAnimatedIcon">@mipmap/logo_icon</item>
         <item name="windowSplashScreenAnimationDuration">1000</item>
-        <item name="postSplashScreenTheme">@style/Base.Theme.App2LBS</item>
+        <item name="postSplashScreenTheme">@style/Theme.App2LBS</item>
     </style>
-    <style name="Theme.App2LBS" parent="Base.Theme.App2LBS" />
+
 </resources>
