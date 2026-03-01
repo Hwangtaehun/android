@@ -15,6 +15,7 @@ import android.view.MenuItem;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
@@ -30,6 +31,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -56,6 +58,34 @@ public class MainActivity extends AppCompatActivity {
 
     // 사용자 위치를 표시하는 마커 객체
     Marker myMarker;
+
+    String [] dialogData = {
+            "accounting", "airport", "amusement_park",
+            "aquarium", "art_gallery", "atm", "bakery",
+            "bank", "bar", "beauty_salon", "bicycle_store",
+            "book_store", "bowling_alley", "bus_station",
+            "cafe", "campground", "car_dealer", "car_rental",
+            "car_repair", "car_wash", "casino", "cemetery",
+            "church", "city_hall", "clothing_store", "convenience_store",
+            "courthouse", "dentist", "department_store", "doctor",
+            "drugstore", "electrician", "electronics_store", "embassy",
+            "fire_station", "florist", "funeral_home", "furniture_store",
+            "gas_station", "gym", "hair_care", "hardware_store", "hindu_temple",
+            "home_goods_store", "hospital", "insurance_agency",
+            "jewelry_store", "laundry", "lawyer", "library", "light_rail_station",
+            "liquor_store", "local_government_office", "locksmith", "lodging",
+            "meal_delivery", "meal_takeaway", "mosque", "movie_rental", "movie_theater",
+            "moving_company", "museum", "night_club", "painter", "park", "parking",
+            "pet_store", "pharmacy", "physiotherapist", "plumber", "police", "post_office",
+            "primary_school", "real_estate_agency", "restaurant", "roofing_contractor",
+            "rv_park", "school", "secondary_school", "shoe_store", "shopping_mall",
+            "spa", "stadium", "storage", "store", "subway_station", "supermarket",
+            "synagogue", "taxi_stand", "tourist_attraction", "train_station",
+            "transit_station", "travel_agency", "university", "eterinary_care","zoo"
+    };
+
+    // 현재 위치
+    Location myLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +150,25 @@ public class MainActivity extends AppCompatActivity {
                     setMyLocation(location2);
                 }
 
+                // 구글 지도 화면 설정을 할 수 있는 객체를 추출한다.
+                UiSettings uiSettings = mainGoogleMap.getUiSettings();
+
+                // 확대 축소 버튼
+                uiSettings.setZoomControlsEnabled(true);
+
+                // 현재 위치를 표시한다.
+                //mainGoogleMap.setMyLocationEnabled(true);
+
+                // 현재 위치 아이콘을 제거한다.
+                //uiSettings.setMyLocationButtonEnabled(false);
+
+                // 맵 타입
+                // mainGoogleMap.setMapType(GoogleMap.MAP_TYPE_NONE);
+                // mainGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                // mainGoogleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                // mainGoogleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                // mainGoogleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+
                 // 현재 위치를 측정한다.
                 getMyLocation();
             }
@@ -153,6 +202,9 @@ public class MainActivity extends AppCompatActivity {
         // 현재 위치 측정을 중단한다.
         locationManager.removeUpdates(myLocationListener);
 
+        // 현재 위치를 담아둔다.
+        myLocation = location;
+
         // 위도와 경도를 가지고 온다.
         double lat = location.getLatitude();
         double lng = location.getLongitude();
@@ -183,6 +235,9 @@ public class MainActivity extends AppCompatActivity {
         markerOptions.icon(markerBitmap);
 
         myMarker = mainGoogleMap.addMarker(markerOptions);
+
+        // 마커가 보이지 않도록 설정한다.
+        // myMarker.setVisible(false);
     }
 
     // 위치측정이 성공하면 반응하는 리스너
@@ -210,6 +265,13 @@ public class MainActivity extends AppCompatActivity {
 
         if(itemId == R.id.main_menu_location){
             getMyLocation();
+        } else if(itemId == R.id.main_menu_place) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("장소 종류 선택");
+            builder.setNegativeButton("취소", null);
+            builder.setNeutralButton("초기화", null);
+            builder.setItems(dialogData, null);
+            builder.show();
         }
 
         return super.onOptionsItemSelected(item);
