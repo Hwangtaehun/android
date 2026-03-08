@@ -17,11 +17,19 @@ import androidx.core.splashscreen.SplashScreen;
 import androidx.core.splashscreen.SplashScreenViewProvider;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.app03_community.databinding.ActivityMainBinding;
+import com.example.app03_community.ui.login.LoginFragment;
 
 public class MainActivity extends AppCompatActivity {
     ActivityMainBinding activityMainBinding;
+
+    Fragment newFragment;
+
+    public static final String LOGIN_FRAGMENT = "LoginFragment";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +87,8 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        replaceFragment(LOGIN_FRAGMENT, false, false, null);
     }
 
 //    class SplashScreenListener implements SplashScreen.OnExitAnimationListener {
@@ -87,4 +97,28 @@ public class MainActivity extends AppCompatActivity {
 //
 //        }
 //    }
+
+    public void replaceFragment(String name, boolean addToBackStack, boolean animate, Bundle bundle) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        if(name == LOGIN_FRAGMENT) {
+            newFragment = new LoginFragment();
+        }
+
+        if(newFragment != null){
+            fragmentTransaction.replace(R.id.mainContainer, newFragment);
+
+            if(addToBackStack == true) {
+                fragmentTransaction.addToBackStack(name);
+            }
+
+            fragmentTransaction.commit();
+        }
+    }
+
+    public void removeFragment(String name){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.popBackStack(name, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+    }
 }
