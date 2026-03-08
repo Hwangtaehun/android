@@ -10,14 +10,25 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mvvm.databinding.ActivityMainBinding;
 import com.example.mvvm.databinding.RowBinding;
+import com.example.mvvm.model.TestModel;
+import com.example.mvvm.viewmodel.TestViewModel;
+
+import java.util.ArrayList;
+
+// model : 애플리케이션에서 사용되는 모든 데이터를 관리하는 요소들
+// repository : 서버나 데이터 베이스에서 데이터를 가져오거나 저장, 수정, 삭제 등의 작업을 한다.
+// viewmodel : 화면 구성을 위해 피룡한 데이터를 관리하는 요소들
 
 public class MainActivity extends AppCompatActivity {
     ActivityMainBinding activityMainBinding;
+    //ViewModel
+    TestViewModel testViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        // ViewModel 객체를 받아온다.
+        testViewModel = new ViewModelProvider(this).get(TestViewModel.class);
 
         activityMainBinding.buttonAdd.setOnClickListener(view -> {
             Intent newIntent = new Intent(this, AddActivity.class);
@@ -56,12 +70,16 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull MainViewHolder holder, int position) {
-            holder.rowBinding.textViewRow.setText("항목 : " + position);
+            ArrayList<TestModel> a1 = testViewModel.dataList.getValue();
+            TestModel testModel = a1.get(position);
+
+            holder.rowBinding.textViewRow.setText(testModel.getTextData1());
         }
 
         @Override
         public int getItemCount() {
-            return 30;
+            ArrayList<TestModel> a1 = testViewModel.dataList.getValue();
+            return a1.size();
         }
 
         class MainViewHolder extends RecyclerView.ViewHolder {
@@ -82,5 +100,14 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // MutableLiveData에 새로운 객체를 설정하는 메서드를 호출한다.
+        testViewModel.getAllData(this);
+
     }
 }

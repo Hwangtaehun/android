@@ -11,6 +11,11 @@ public class TestModel {
         this.textData2 = textData2;
     }
 
+    public TestModel(String textData1, String textData2){
+        this.textData1 = textData1;
+        this.textData2 = textData2;
+    }
+
     public int getIdxData() {
         return idxData;
     }
