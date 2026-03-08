@@ -25,10 +25,18 @@ public class LoginFragment extends Fragment {
 
         setToolbar();
 
+        setButton();
+
         return fragmentLoginBinding.getRoot();
     }
 
     public void setToolbar() {
         fragmentLoginBinding.toolbarLogin.setTitle("로그인");
+    }
+
+    public void setButton() {
+        fragmentLoginBinding.buttonLoginJoin.setOnClickListener(v -> {
+            mainActivity.replaceFragment(MainActivity.JOIN_FRAGMENT, true, true, null);
+        });
     }
 }

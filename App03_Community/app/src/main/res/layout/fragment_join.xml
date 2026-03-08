@@ -6,10 +6,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:transitionGroup="true"
-    tools:context=".ui.login.LoginFragment">
+    tools:context=".ui.join.JoinFragment">
 
     <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbarLogin"
+        android:id="@+id/toolbarJoin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
@@ -24,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="10dp">
+            android:padding="10dp" >
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -34,7 +34,7 @@
                 app:startIconDrawable="@drawable/person_24px">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/inputLoginUserId"
+                    android:id="@+id/inputJoinUserId"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text"
@@ -44,51 +44,43 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
                 android:hint="비밀번호"
                 app:endIconMode="password_toggle"
                 app:startIconDrawable="@drawable/key_24px">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/inputLoginUserPw"
+                    android:id="@+id/inputJoinUserPw"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text|textPassword"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.checkbox.MaterialCheckBox
-                android:id="@+id/checkBoxLoginAuto"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginTop="10dp"
-                android:text="자동로그인"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+                android:hint="비밀번호 확인"
+                app:endIconMode="password_toggle"
+                app:startIconDrawable="@drawable/key_24px">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/inputJoinUserPw2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text|textPassword"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <Button
-                android:id="@+id/buttonLoginSubmit"
+                android:id="@+id/buttonJoinNext"
                 style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="로그인"
+                android:text="다음"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-
-            <com.google.android.material.divider.MaterialDivider
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_marginTop="10dp"
-                android:background="@color/black" />
-
-            <Button
-                android:id="@+id/buttonLoginJoin"
-                style="@style/Widget.Material3.Button.OutlinedButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="회원가입"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-
         </LinearLayout>
     </ScrollView>
-
 </LinearLayout>

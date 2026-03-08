@@ -22,14 +22,19 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.app03_community.databinding.ActivityMainBinding;
+import com.example.app03_community.ui.adduserinfo.AddUserInfoFragment;
+import com.example.app03_community.ui.join.JoinFragment;
 import com.example.app03_community.ui.login.LoginFragment;
+import com.google.android.material.transition.MaterialSharedAxis;
 
 public class MainActivity extends AppCompatActivity {
     ActivityMainBinding activityMainBinding;
 
-    Fragment newFragment;
+    Fragment newFragment, oldFragment;
 
     public static final String LOGIN_FRAGMENT = "LoginFragment";
+    public static final String JOIN_FRAGMENT = "JoinFragment";
+    public static final String ADD_USER_INFO_FRAGMENT = "AddUserInfoFragment";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,14 +104,44 @@ public class MainActivity extends AppCompatActivity {
 //    }
 
     public void replaceFragment(String name, boolean addToBackStack, boolean animate, Bundle bundle) {
+        SystemClock.sleep(200);
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
+        if(newFragment != null) {
+            oldFragment = newFragment;
+        }
+
         if(name == LOGIN_FRAGMENT) {
             newFragment = new LoginFragment();
+        } else if(name == JOIN_FRAGMENT) {
+            newFragment = new JoinFragment();
+        } else if(name == ADD_USER_INFO_FRAGMENT) {
+            newFragment = new AddUserInfoFragment();
         }
 
         if(newFragment != null){
+            if(animate == true) {
+                // oldFragment -> newFragment
+                // oldFragment : exit
+                // newFragment : enter
+
+                // newFragment -> oldeFragment
+                // oldFragment : reenter
+                // newFragment : return
+                if(oldFragment != null) {
+                    oldFragment.setExitTransition(new MaterialSharedAxis(MaterialSharedAxis.X, true));
+                    oldFragment.setReenterTransition(new MaterialSharedAxis(MaterialSharedAxis.X, false));
+                    oldFragment.setEnterTransition(null);
+                    oldFragment.setReturnTransition(null);
+                }
+
+                newFragment.setExitTransition(null);
+                newFragment.setReenterTransition(null);
+                newFragment.setEnterTransition(new MaterialSharedAxis(MaterialSharedAxis.X, true));
+                newFragment.setReturnTransition(new MaterialSharedAxis(MaterialSharedAxis.X, false));
+            }
             fragmentTransaction.replace(R.id.mainContainer, newFragment);
 
             if(addToBackStack == true) {
@@ -118,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void removeFragment(String name){
+        SystemClock.sleep(200);
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.popBackStack(name, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
