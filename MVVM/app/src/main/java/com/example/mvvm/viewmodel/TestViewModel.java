@@ -12,6 +12,8 @@ import java.util.ArrayList;
 
 public class TestViewModel extends ViewModel {
     public MutableLiveData<ArrayList<TestModel>> dataList = new MutableLiveData<>();
+    public MutableLiveData<String> data1 = new MutableLiveData<>();
+    public MutableLiveData<String> data2 = new MutableLiveData<>();
 
     public TestViewModel(){
         ArrayList<TestModel> a1 = new ArrayList<>();

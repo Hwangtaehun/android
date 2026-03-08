@@ -10,32 +10,34 @@ import com.example.mvvm.model.TestModel;
 import java.util.ArrayList;
 
 public class TestRepository {
-    public static void addData(Context context, TestModel testModel) {
-        DBHelper dbHelper = new DBHelper(context);
-        SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
+
+    public static void addData(Context context, TestModel testModel){
+        DBHelper dbHepler = new DBHelper(context);
+        SQLiteDatabase sqLiteDatabase = dbHepler.getWritableDatabase();
 
         String sql = "insert into TestTable "
-                   + "(testData1, testData2) "
-                   + "values (?, ?)";
+                + "(textData1, textData2) "
+                + "values (?, ?)";
 
-        String [] args = {
+        String [] args ={
                 testModel.getTextData1(),
                 testModel.getTextData2()
         };
 
         sqLiteDatabase.execSQL(sql, args);
-        dbHelper.close();
+        dbHepler.close();
     }
 
-    public static ArrayList<TestModel> getDataAll(Context context) {
+    public static ArrayList<TestModel> getDataAll(Context context){
+
         ArrayList<TestModel> a1 = new ArrayList<>();
-        DBHelper dbHelper = new DBHelper(context);
-        SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
+        DBHelper dbHepler = new DBHelper(context);
+        SQLiteDatabase sqLiteDatabase = dbHepler.getWritableDatabase();
 
         String sql = "select * from TestTable order by idxData desc";
         Cursor c1 = sqLiteDatabase.rawQuery(sql, null);
 
-        while (c1.moveToNext()) {
+        while(c1.moveToNext()){
             int idx1 = c1.getColumnIndex("idxData");
             int idx2 = c1.getColumnIndex("textData1");
             int idx3 = c1.getColumnIndex("textData2");
@@ -49,7 +51,7 @@ public class TestRepository {
             a1.add(testModel);
         }
 
-        dbHelper.close();
+        dbHepler.close();
         return a1;
     }
 }

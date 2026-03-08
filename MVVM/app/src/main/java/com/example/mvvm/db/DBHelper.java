@@ -11,17 +11,17 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onCreate(SQLiteDatabase db) {
+    public void onCreate(SQLiteDatabase sqLiteDatabase) {
         String sql = "create table TestTable "
-                   + "(idxData integer primary key autoincrement, "
-                   + "textData1 text not null, "
-                   + "textData2 text not null)";
+                + "(idxData integer primary key autoincrement, "
+                + "textData1 text not null, "
+                + "textData2 text not null)";
 
-        db.execSQL(sql);
+        sqLiteDatabase.execSQL(sql);
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
 
     }
 }

@@ -56,6 +56,14 @@ public class MainActivity extends AppCompatActivity {
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         activityMainBinding.recyclerViewMain.setLayoutManager(linearLayoutManager);
+
+        // 감시자 설정
+        // MutableLiveData가 관리하는 값을 새롭게 설정하면 감시자가 동작하고 감시자에 구현한 코드가 자동으로 동작하게 된다.
+        // MutableLiveData가 관리하는 데이터를 통해 화면을 구성하는 작업을 해주면 된다.
+        testViewModel.dataList.observe(this, testModels -> {
+            RecyclerView.Adapter adapter = activityMainBinding.recyclerViewMain.getAdapter();
+            adapter.notifyDataSetChanged();
+        });
     }
 
     class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerViewAdapter.MainViewHolder> {
@@ -95,7 +103,16 @@ public class MainActivity extends AppCompatActivity {
                 );
                 rowBinding.getRoot().setLayoutParams(layoutParams);
                 rowBinding.getRoot().setOnClickListener(v -> {
+                    ArrayList<TestModel> a1 = testViewModel.dataList.getValue();
+                    //int position = getAdapterPosition();
+                    int position = getBindingAdapterPosition();
+                    TestModel a2 = a1.get(position);
+
                     Intent newIntent = new Intent(MainActivity.this, ShowActivity.class);
+
+                    newIntent.putExtra("data1", a2.getTextData1());
+                    newIntent.putExtra("data2", a2.getTextData2());
+
                     startActivity(newIntent);
                 });
             }
