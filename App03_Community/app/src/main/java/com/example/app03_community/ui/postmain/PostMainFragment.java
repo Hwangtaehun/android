@@ -3,6 +3,8 @@ package com.example.app03_community.ui.postmain;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.os.SystemClock;
 import android.view.LayoutInflater;
@@ -13,10 +15,20 @@ import com.example.app03_community.MainActivity;
 import com.example.app03_community.R;
 import com.example.app03_community.databinding.FragmentPostMainBinding;
 import com.example.app03_community.databinding.HeaderPostmainBinding;
+import com.example.app03_community.ui.postlist.PostListFragment;
+import com.google.android.material.transition.MaterialSharedAxis;
+
+import java.sql.Struct;
 
 public class PostMainFragment extends Fragment {
     FragmentPostMainBinding fragmentPostMainBinding;
     MainActivity mainActivity;
+
+    // 프래그먼트를 담는 변수
+    Fragment newFragment;
+    Fragment oldFragment;
+
+    public static final String POST_LIST_FRAGMENT = "PostListFragment";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -27,6 +39,7 @@ public class PostMainFragment extends Fragment {
 
         setNavigationDrawer();
 
+        replaceFragment(POST_LIST_FRAGMENT, false, false, null);
 
         return fragmentPostMainBinding.getRoot();
     }
@@ -41,5 +54,48 @@ public class PostMainFragment extends Fragment {
             fragmentPostMainBinding.drawLayoutPostMain.close();
             return true;
         });
+    }
+
+    public void replaceFragment(String name, boolean addToBackStack, boolean animate, Bundle bundle) {
+        SystemClock.sleep(200);
+        FragmentManager fragmentManager = mainActivity.getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        if(newFragment != null) {
+            oldFragment = newFragment;
+        }
+
+        if( name == POST_LIST_FRAGMENT ) {
+            newFragment = new PostListFragment();
+        }
+
+        if(newFragment != null) {
+            if(animate == true) {
+                if(oldFragment != null) {
+                    oldFragment.setExitTransition(new MaterialSharedAxis(MaterialSharedAxis.X, true));
+                    oldFragment.setReenterTransition(new MaterialSharedAxis(MaterialSharedAxis.X, false));
+                    oldFragment.setEnterTransition(null);
+                    oldFragment.setReturnTransition(null);
+                    newFragment.setExitTransition(null);
+                    newFragment.setReenterTransition(null);
+                    newFragment.setEnterTransition(new MaterialSharedAxis(MaterialSharedAxis.X, true));
+                    newFragment.setReturnTransition(new MaterialSharedAxis(MaterialSharedAxis.X, false));
+                }
+
+                fragmentTransaction.replace(R.id.postMainContaioner, newFragment);
+
+                if(addToBackStack == true) {
+                    fragmentTransaction.addToBackStack(name);
+                }
+
+                fragmentTransaction.commit();
+            }
+        }
+    }
+
+    public void removeFragment(String name){
+        SystemClock.sleep(200);
+        FragmentManager fragmentManager = mainActivity.getSupportFragmentManager();
+        fragmentManager.popBackStack(name, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 }

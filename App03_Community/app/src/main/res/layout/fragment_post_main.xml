@@ -13,9 +13,16 @@
         android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/postMainContaioner"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"/>
+            android:orientation="vertical">
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/fragmentContainerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
