@@ -28,6 +28,8 @@ public class PostMainFragment extends Fragment {
     Fragment newFragment;
     Fragment oldFragment;
 
+    public DrawerLayout postDrawerLayout;
+
     public static final String POST_LIST_FRAGMENT = "PostListFragment";
 
     @Override
@@ -45,6 +47,8 @@ public class PostMainFragment extends Fragment {
     }
 
     public void setNavigationDrawer() {
+        postDrawerLayout = fragmentPostMainBinding.drawerLayoutPostMain;
+
         HeaderPostmainBinding headerPostmainBinding = HeaderPostmainBinding.inflate(getLayoutInflater());
         headerPostmainBinding.headerPostMainNickname.setText("홍길동님");
         fragmentPostMainBinding.navigationViewPostMain.addHeaderView(headerPostmainBinding.getRoot());
@@ -71,27 +75,28 @@ public class PostMainFragment extends Fragment {
                 break;
         }
 
-        if(newFragment != null) {
-            if(animate == true) {
-                if(oldFragment != null) {
+        if(newFragment != null){
+            if(animate == true){
+                if(oldFragment != null){
                     oldFragment.setExitTransition(new MaterialSharedAxis(MaterialSharedAxis.X, true));
                     oldFragment.setReenterTransition(new MaterialSharedAxis(MaterialSharedAxis.X, false));
                     oldFragment.setEnterTransition(null);
                     oldFragment.setReturnTransition(null);
-                    newFragment.setExitTransition(null);
-                    newFragment.setReenterTransition(null);
-                    newFragment.setEnterTransition(new MaterialSharedAxis(MaterialSharedAxis.X, true));
-                    newFragment.setReturnTransition(new MaterialSharedAxis(MaterialSharedAxis.X, false));
                 }
 
-                fragmentTransaction.replace(R.id.postMainContainer, newFragment);
-
-                if(addToBackStack == true){
-                    fragmentTransaction.addToBackStack(name);
-                }
-
-                fragmentTransaction.commit();
+                newFragment.setExitTransition(null);
+                newFragment.setReenterTransition(null);
+                newFragment.setEnterTransition(new MaterialSharedAxis(MaterialSharedAxis.X, true));
+                newFragment.setReturnTransition(new MaterialSharedAxis(MaterialSharedAxis.X, false));
             }
+
+            fragmentTransaction.replace(R.id.postMainContainer, newFragment);
+
+            if(addToBackStack == true){
+                fragmentTransaction.addToBackStack(name);
+            }
+
+            fragmentTransaction.commit();
         }
     }
 

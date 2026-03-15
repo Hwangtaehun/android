@@ -6,6 +6,8 @@ import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.View;
 import android.view.animation.AnticipateInterpolator;
 
@@ -32,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
     ActivityMainBinding activityMainBinding;
 
     Fragment newFragment, oldFragment;
+
+    public PostMainFragment postMainFragment;
 
     public static final String LOGIN_FRAGMENT = "LoginFragment";
     public static final String JOIN_FRAGMENT = "JoinFragment";
@@ -122,7 +126,8 @@ public class MainActivity extends AppCompatActivity {
         } else if(name == ADD_USER_INFO_FRAGMENT) {
             newFragment = new AddUserInfoFragment();
         } else if(name == POST_MAIN_FRAGMENT) {
-            newFragment = new PostMainFragment();
+            postMainFragment = new PostMainFragment();
+            newFragment = postMainFragment;
         }
 
         if(newFragment != null){
@@ -160,5 +165,13 @@ public class MainActivity extends AppCompatActivity {
         SystemClock.sleep(200);
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.popBackStack(name, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+    }
+
+    public int dpToPixel(int dp) {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
+        int p1 = Math.round((float) dp * displayMetrics.density);
+        return p1;
     }
 }
