@@ -25,6 +25,7 @@ import com.example.app03_community.databinding.ActivityMainBinding;
 import com.example.app03_community.ui.adduserinfo.AddUserInfoFragment;
 import com.example.app03_community.ui.join.JoinFragment;
 import com.example.app03_community.ui.login.LoginFragment;
+import com.example.app03_community.ui.postmain.PostMainFragment;
 import com.google.android.material.transition.MaterialSharedAxis;
 
 public class MainActivity extends AppCompatActivity {
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String LOGIN_FRAGMENT = "LoginFragment";
     public static final String JOIN_FRAGMENT = "JoinFragment";
     public static final String ADD_USER_INFO_FRAGMENT = "AddUserInfoFragment";
+    public static final String POST_MAIN_FRAGMENT = "PostMainFragment";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +121,8 @@ public class MainActivity extends AppCompatActivity {
             newFragment = new JoinFragment();
         } else if(name == ADD_USER_INFO_FRAGMENT) {
             newFragment = new AddUserInfoFragment();
+        } else if(name == POST_MAIN_FRAGMENT) {
+            newFragment = new PostMainFragment();
         }
 
         if(newFragment != null){

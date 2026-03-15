@@ -38,5 +38,9 @@ public class LoginFragment extends Fragment {
         fragmentLoginBinding.buttonLoginJoin.setOnClickListener(v -> {
             mainActivity.replaceFragment(MainActivity.JOIN_FRAGMENT, true, true, null);
         });
+
+        fragmentLoginBinding.buttonLoginSubmit.setOnClickListener(v -> {
+            mainActivity.replaceFragment(MainActivity.POST_MAIN_FRAGMENT, false, true, null);
+        });
     }
 }
