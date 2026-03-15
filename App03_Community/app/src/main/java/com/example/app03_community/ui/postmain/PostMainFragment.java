@@ -2,6 +2,7 @@ package com.example.app03_community.ui.postmain;
 
 import android.os.Bundle;
 
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -11,14 +12,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.transition.MaterialSharedAxis;
+
 import com.example.app03_community.MainActivity;
 import com.example.app03_community.R;
 import com.example.app03_community.databinding.FragmentPostMainBinding;
 import com.example.app03_community.databinding.HeaderPostmainBinding;
 import com.example.app03_community.ui.postlist.PostListFragment;
-import com.google.android.material.transition.MaterialSharedAxis;
-
-import java.sql.Struct;
 
 public class PostMainFragment extends Fragment {
     FragmentPostMainBinding fragmentPostMainBinding;
@@ -82,9 +82,9 @@ public class PostMainFragment extends Fragment {
                     newFragment.setReturnTransition(new MaterialSharedAxis(MaterialSharedAxis.X, false));
                 }
 
-                fragmentTransaction.replace(R.id.postMainContaioner, newFragment);
+                fragmentTransaction.replace(R.id.postMainContainer, newFragment);
 
-                if(addToBackStack == true) {
+                if(addToBackStack == true){
                     fragmentTransaction.addToBackStack(name);
                 }
 
