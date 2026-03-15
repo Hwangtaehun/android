@@ -24,7 +24,7 @@ public class PostMainFragment extends Fragment {
     FragmentPostMainBinding fragmentPostMainBinding;
     MainActivity mainActivity;
 
-    // 프래그먼트를 담는 변수
+    // 프래그먼트를 담을 변수
     Fragment newFragment;
     Fragment oldFragment;
 
@@ -51,7 +51,7 @@ public class PostMainFragment extends Fragment {
 
         fragmentPostMainBinding.navigationViewPostMain.setNavigationItemSelectedListener(menuItem -> {
             SystemClock.sleep(300);
-            fragmentPostMainBinding.drawLayoutPostMain.close();
+            fragmentPostMainBinding.drawerLayoutPostMain.close();
             return true;
         });
     }
@@ -65,8 +65,10 @@ public class PostMainFragment extends Fragment {
             oldFragment = newFragment;
         }
 
-        if( name == POST_LIST_FRAGMENT ) {
-            newFragment = new PostListFragment();
+        switch (name){
+            case POST_LIST_FRAGMENT :
+                newFragment = new PostListFragment();
+                break;
         }
 
         if(newFragment != null) {
@@ -93,7 +95,7 @@ public class PostMainFragment extends Fragment {
         }
     }
 
-    public void removeFragment(String name){
+    public void removerFragment(String name){
         SystemClock.sleep(200);
         FragmentManager fragmentManager = mainActivity.getSupportFragmentManager();
         fragmentManager.popBackStack(name, FragmentManager.POP_BACK_STACK_INCLUSIVE);
