@@ -102,6 +102,10 @@ public class PostListFragment extends Fragment {
         public void onBindViewHolder(@NonNull PostListMainRecyclerViewHolder holder, int position) {
             holder.rowPostListBinding.textViewRowPostListSubject.setText("제목 : " + position);
             holder.rowPostListBinding.textViewRowPostListNickname.setText("닉네임 : " + position);
+
+            holder.rowPostListBinding.getRoot().setOnClickListener(v -> {
+                postMainFragment.replaceFragment(PostMainFragment.POST_READ_FRAGMENT, true, true, null);
+            });
         }
 
         @Override

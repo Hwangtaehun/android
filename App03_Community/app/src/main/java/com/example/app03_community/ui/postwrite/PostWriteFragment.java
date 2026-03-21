@@ -38,5 +38,18 @@ public class PostWriteFragment extends Fragment {
         });
 
         fragmentPostWriteBinding.toolbarPostWrite.inflateMenu(R.menu.post_write_main_menu);
+        fragmentPostWriteBinding.toolbarPostWrite.setOnMenuItemClickListener(item -> {
+            int itemId = item.getItemId();
+
+            if(itemId == R.id.menuItemPostWriteCamera) {
+
+            } else if(itemId == R.id.menuItemPostWriteAlbum) {
+
+            } else if(itemId == R.id.menuItemPostWriteDone) {
+                postMainFragment.replaceFragment(PostMainFragment.POST_READ_FRAGMENT, true, true, null);
+            }
+
+            return true;
+        });
     }
 }
