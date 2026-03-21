@@ -51,6 +51,15 @@ public class PostListFragment extends Fragment {
     public void setSearch() {
         fragmentPostListBinding.searchBarPostList.setHint("여기를 눌러 검색해주세요.");
         fragmentPostListBinding.searchBarPostList.inflateMenu(R.menu.post_list_main_menu);
+        fragmentPostListBinding.searchBarPostList.setOnMenuItemClickListener(item -> {
+            int itemId = item.getItemId();
+
+            if(itemId == R.id.menuItemPostListAdd) {
+                postMainFragment.replaceFragment(PostMainFragment.POST_WRITE_FRAGMENT, true, true, null);
+            }
+
+            return true;
+        });
 
         fragmentPostListBinding.searchViewPostList.setHint("검색어을 입력해주세요.");
     }

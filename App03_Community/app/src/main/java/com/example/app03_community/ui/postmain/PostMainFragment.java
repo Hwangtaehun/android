@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.app03_community.ui.postwrite.PostWriteFragment;
 import com.google.android.material.transition.MaterialSharedAxis;
 
 import com.example.app03_community.MainActivity;
@@ -31,6 +32,7 @@ public class PostMainFragment extends Fragment {
     public DrawerLayout postDrawerLayout;
 
     public static final String POST_LIST_FRAGMENT = "PostListFragment";
+    public static final String POST_WRITE_FRAGMENT = "PostWireFragment";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -72,6 +74,9 @@ public class PostMainFragment extends Fragment {
         switch (name){
             case POST_LIST_FRAGMENT :
                 newFragment = new PostListFragment();
+                break;
+            case POST_WRITE_FRAGMENT:
+                newFragment = new PostWriteFragment();
                 break;
         }
 
