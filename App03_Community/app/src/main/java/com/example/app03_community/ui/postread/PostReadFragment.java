@@ -41,6 +41,17 @@ public class PostReadFragment extends Fragment {
         });
 
         fragmentPostReadBinding.toolbarPostRead.inflateMenu(R.menu.post_read_main_menu);
+        fragmentPostReadBinding.toolbarPostRead.setOnMenuItemClickListener(item -> {
+            int itemId = item.getItemId();
+
+            if(itemId == R.id.menuItemPostReadModify) {
+                postMainFragment.replaceFragment(PostMainFragment.POST_MODIFY_FRAGMENT, true, true, null);
+            } else if(itemId == R.id.menuItemPostReadDelete) {
+
+            }
+
+            return true;
+        });
     }
 
     public void setContent() {
