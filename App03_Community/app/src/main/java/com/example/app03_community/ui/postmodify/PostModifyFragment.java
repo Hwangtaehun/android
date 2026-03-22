@@ -40,6 +40,19 @@ public class PostModifyFragment extends Fragment {
         });
 
         fragmentPostModifyBinding.toolbarPostModify.inflateMenu(R.menu.post_modify_main_menu);
+        fragmentPostModifyBinding.toolbarPostModify.setOnMenuItemClickListener(item -> {
+            int itemId = item.getItemId();
+
+            if (itemId == R.id.menuItemPostModifyCamera) {
+
+            } else if (itemId == R.id.menuItemPostModifyAlbum) {
+
+            } else if (itemId == R.id.menuItemPostModifyDone) {
+                postMainFragment.removerFragment(PostMainFragment.POST_MODIFY_FRAGMENT);
+            }
+
+            return true;
+        });
     }
 
     public void setContent() {

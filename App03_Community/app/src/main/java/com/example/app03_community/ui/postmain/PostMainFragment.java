@@ -62,14 +62,29 @@ public class PostMainFragment extends Fragment {
         fragmentPostMainBinding.navigationViewPostMain.addHeaderView(headerPostmainBinding.getRoot());
 
         fragmentPostMainBinding.navigationViewPostMain.setNavigationItemSelectedListener(menuItem -> {
-            SystemClock.sleep(300);
-
-            fragmentPostMainBinding.drawerLayoutPostMain.close();
+            new Thread(() -> {
+                SystemClock.sleep(300);
+                fragmentPostMainBinding.drawerLayoutPostMain.close();
+            }).start();
 
             int itemId = menuItem.getItemId();
 
-            if(itemId == R.id.menuItemPostNavigationModifyUserInfo) {
+            if (itemId == R.id.menuItemPostNavigationAll) {
+                replaceFragment(POST_LIST_FRAGMENT, false, false, null);
+            } else if (itemId == R.id.menuItemPostNavigation1) {
+                replaceFragment(POST_LIST_FRAGMENT, false, false, null);
+            } else if (itemId == R.id.menuItemPostNavigation2) {
+                replaceFragment(POST_LIST_FRAGMENT, false, false, null);
+            } else if (itemId == R.id.menuItemPostNavigation3) {
+                replaceFragment(POST_LIST_FRAGMENT, false, false, null);
+            } else if (itemId == R.id.menuItemPostNavigation4) {
+                replaceFragment(POST_LIST_FRAGMENT, false, false, null);
+            } else if (itemId == R.id.menuItemPostNavigationModifyUserInfo) {
                 replaceFragment(MODIFY_USER_FRAGMENT, false, false, null);
+            } else if (itemId == R.id.menuItemPostNaivgationLogout) {
+                mainActivity.replaceFragment(MainActivity.LOGIN_FRAGMENT, false, false, null);
+            } else if (itemId == R.id.menuItemPostNavigationSignOut) {
+                mainActivity.replaceFragment(MainActivity.LOGIN_FRAGMENT, false, false, null);
             }
 
             return true;

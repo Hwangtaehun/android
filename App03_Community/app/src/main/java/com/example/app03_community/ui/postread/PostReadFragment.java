@@ -47,7 +47,8 @@ public class PostReadFragment extends Fragment {
             if(itemId == R.id.menuItemPostReadModify) {
                 postMainFragment.replaceFragment(PostMainFragment.POST_MODIFY_FRAGMENT, true, true, null);
             } else if(itemId == R.id.menuItemPostReadDelete) {
-
+                postMainFragment.removerFragment(PostMainFragment.POST_WRITE_FRAGMENT);
+                postMainFragment.removerFragment(PostMainFragment.POST_READ_FRAGMENT);
             }
 
             return true;
