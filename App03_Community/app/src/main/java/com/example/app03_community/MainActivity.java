@@ -4,12 +4,15 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.View;
+import android.view.Window;
 import android.view.animation.AnticipateInterpolator;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -19,6 +22,7 @@ import androidx.core.splashscreen.SplashScreen;
 import androidx.core.splashscreen.SplashScreenViewProvider;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -28,6 +32,7 @@ import com.example.app03_community.ui.adduserinfo.AddUserInfoFragment;
 import com.example.app03_community.ui.join.JoinFragment;
 import com.example.app03_community.ui.login.LoginFragment;
 import com.example.app03_community.ui.postmain.PostMainFragment;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.transition.MaterialSharedAxis;
 
 public class MainActivity extends AppCompatActivity {
@@ -173,5 +178,30 @@ public class MainActivity extends AppCompatActivity {
 
         int p1 = Math.round((float) dp * displayMetrics.density);
         return p1;
+    }
+
+    public void showSoftInput(View view) {
+        view.requestFocus();
+        new Thread(() -> {
+            SystemClock.sleep(200);
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodManager.showSoftInput(view, 0);
+        }).start();
+    }
+
+    public void hideSoftInput() {
+        Window window = getWindow();
+        View view = window.getCurrentFocus();
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    public void showAlertDialog(String title, String message, DialogInterface.OnClickListener listener) {
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.setIcon(R.drawable.warning_24px);
+        builder.setPositiveButton("확인", listener);
+        builder.show();
     }
 }
