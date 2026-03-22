@@ -1,47 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:transitionGroup="true"
-    tools:context=".ui.postlist.PostListFragment">
-
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbarPostList"
+    xmlns:tools="http://schemas.android.com/tools">
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="@style/Theme.App03_Community.Toolbar" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:transitionGroup="true"
+        tools:context=".ui.postlist.PostListFragment">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <com.google.android.material.search.SearchBar
-            android:id="@+id/searchBarPostList"
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbarPostList"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewPostListMain"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="90dp" />
-
-        <com.google.android.material.search.SearchView
-            android:id="@+id/searchViewPostList"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_anchor="@id/searchBarPostList">
+            android:background="?attr/colorPrimary"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="@style/Theme.App03_Community.Toolbar" />
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.search.SearchBar
+                android:id="@+id/searchBarPostList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewPostListResult"
+                android:id="@+id/recyclerViewPostListMain"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </com.google.android.material.search.SearchView>
+                android:layout_height="match_parent"
+                android:layout_marginTop="90dp" />
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
-</LinearLayout>
+            <com.google.android.material.search.SearchView
+                android:id="@+id/searchViewPostList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_anchor="@id/searchBarPostList">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewPostListResult"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </com.google.android.material.search.SearchView>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </LinearLayout>
+</layout>
