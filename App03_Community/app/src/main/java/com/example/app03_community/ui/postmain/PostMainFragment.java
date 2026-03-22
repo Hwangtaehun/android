@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.app03_community.ui.modifyuserinfo.ModifyUserInfoFragment;
 import com.example.app03_community.ui.postmodify.PostModifyFragment;
 import com.example.app03_community.ui.postread.PostReadFragment;
 import com.example.app03_community.ui.postwrite.PostWriteFragment;
@@ -37,6 +38,7 @@ public class PostMainFragment extends Fragment {
     public static final String POST_WRITE_FRAGMENT = "PostWireFragment";
     public static final String POST_READ_FRAGMENT = "PostReadFragment";
     public static final String POST_MODIFY_FRAGMENT = "PostModifyFragment";
+    public static final String MODIFY_USER_FRAGMENT = "ModifyUserFragment";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,7 +63,15 @@ public class PostMainFragment extends Fragment {
 
         fragmentPostMainBinding.navigationViewPostMain.setNavigationItemSelectedListener(menuItem -> {
             SystemClock.sleep(300);
+
             fragmentPostMainBinding.drawerLayoutPostMain.close();
+
+            int itemId = menuItem.getItemId();
+
+            if(itemId == R.id.menuItemPostNavigationModifyUserInfo) {
+                replaceFragment(MODIFY_USER_FRAGMENT, false, false, null);
+            }
+
             return true;
         });
     }
@@ -87,6 +97,9 @@ public class PostMainFragment extends Fragment {
                 break;
             case POST_MODIFY_FRAGMENT:
                 newFragment = new PostModifyFragment();
+                break;
+            case MODIFY_USER_FRAGMENT:
+                newFragment = new ModifyUserInfoFragment();
                 break;
         }
 
