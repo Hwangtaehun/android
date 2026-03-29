@@ -49,7 +49,9 @@ public class PostMainFragment extends Fragment {
 
         setNavigationDrawer();
 
-        replaceFragment(POST_LIST_FRAGMENT, false, false, null);
+        Bundle newbundle = new Bundle();
+        newbundle.putString("toolbarTitle", "전체 게시판");
+        replaceFragment(POST_LIST_FRAGMENT, false, false, newbundle);
 
         return fragmentPostMainBinding.getRoot();
     }
@@ -70,15 +72,25 @@ public class PostMainFragment extends Fragment {
             int itemId = menuItem.getItemId();
 
             if (itemId == R.id.menuItemPostNavigationAll) {
-                replaceFragment(POST_LIST_FRAGMENT, false, false, null);
+                Bundle newbundle = new Bundle();
+                newbundle.putString("toolbarTitle", "전체 게시판");
+                replaceFragment(POST_LIST_FRAGMENT, false, false, newbundle);
             } else if (itemId == R.id.menuItemPostNavigation1) {
-                replaceFragment(POST_LIST_FRAGMENT, false, false, null);
+                Bundle newbundle = new Bundle();
+                newbundle.putString("toolbarTitle", "자유 게시판");
+                replaceFragment(POST_LIST_FRAGMENT, false, false, newbundle);
             } else if (itemId == R.id.menuItemPostNavigation2) {
-                replaceFragment(POST_LIST_FRAGMENT, false, false, null);
+                Bundle newbundle = new Bundle();
+                newbundle.putString("toolbarTitle", "유머 게시판");
+                replaceFragment(POST_LIST_FRAGMENT, false, false, newbundle);
             } else if (itemId == R.id.menuItemPostNavigation3) {
-                replaceFragment(POST_LIST_FRAGMENT, false, false, null);
+                Bundle newbundle = new Bundle();
+                newbundle.putString("toolbarTitle", "시사 게시판");
+                replaceFragment(POST_LIST_FRAGMENT, false, false, newbundle);
             } else if (itemId == R.id.menuItemPostNavigation4) {
-                replaceFragment(POST_LIST_FRAGMENT, false, false, null);
+                Bundle newbundle = new Bundle();
+                newbundle.putString("toolbarTitle", "운동 게시판");
+                replaceFragment(POST_LIST_FRAGMENT, false, false, newbundle);
             } else if (itemId == R.id.menuItemPostNavigationModifyUserInfo) {
                 replaceFragment(MODIFY_USER_FRAGMENT, false, false, null);
             } else if (itemId == R.id.menuItemPostNaivgationLogout) {
@@ -131,6 +143,10 @@ public class PostMainFragment extends Fragment {
                 newFragment.setReenterTransition(null);
                 newFragment.setEnterTransition(new MaterialSharedAxis(MaterialSharedAxis.X, true));
                 newFragment.setReturnTransition(new MaterialSharedAxis(MaterialSharedAxis.X, false));
+            }
+
+            if(bundle != null){
+                newFragment.setArguments(bundle);
             }
 
             fragmentTransaction.replace(R.id.postMainContainer, newFragment);

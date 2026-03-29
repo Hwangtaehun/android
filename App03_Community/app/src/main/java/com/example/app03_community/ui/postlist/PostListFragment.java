@@ -3,6 +3,7 @@ package com.example.app03_community.ui.postlist;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,17 +20,26 @@ import com.example.app03_community.databinding.RowPostListBinding;
 import com.example.app03_community.ui.postmain.PostMainFragment;
 import com.google.android.material.divider.MaterialDividerItemDecoration;
 
+import java.util.ArrayList;
+
 public class PostListFragment extends Fragment {
 
     FragmentPostListBinding fragmentPostListBinding;
     MainActivity mainActivity;
     PostMainFragment postMainFragment;
+    PostListViewModel postListViewModel;
+    ArrayList<PostListItemViewModel> postListItemViewModelArrayList = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        fragmentPostListBinding = FragmentPostListBinding.inflate(inflater);
+        // fragmentPostListBinding = FragmentPostListBinding.inflate(inflater);
+        fragmentPostListBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_post_list, container, false);
+        postListViewModel = new PostListViewModel();
+        fragmentPostListBinding.setPostListViewModel(postListViewModel);
+        fragmentPostListBinding.setLifecycleOwner(this);
+
         mainActivity = (MainActivity) getActivity();
         postMainFragment = mainActivity.postMainFragment;
 
@@ -41,7 +51,14 @@ public class PostListFragment extends Fragment {
     }
 
     public void setToolbar(){
-        fragmentPostListBinding.toolbarPostList.setTitle("전체 게시판");
+        // fragmentPostListBinding.toolbarPostList.setTitle("전체 게시판");
+
+        Bundle bundle = getArguments();
+        if(bundle != null) {
+            String title = bundle.getString("toolbarTitle");
+            postListViewModel.toolbarPostListTitle.setValue(title);
+        }
+
         fragmentPostListBinding.toolbarPostList.setNavigationIcon(R.drawable.menu_24px);
         fragmentPostListBinding.toolbarPostList.setNavigationOnClickListener(v -> {
             postMainFragment.postDrawerLayout.open();
@@ -89,10 +106,19 @@ public class PostListFragment extends Fragment {
     }
 
     class PostListMainRecyclerViewAdapter extends RecyclerView.Adapter<PostListMainRecyclerViewAdapter.PostListMainRecyclerViewHolder> {
+        public PostListMainRecyclerViewAdapter() {
+            postListItemViewModelArrayList.clear();
+
+            for (int i = 0; i < 100; i++) {
+                postListItemViewModelArrayList.add(new PostListItemViewModel());
+            }
+        }
+
         @NonNull
         @Override
         public PostListMainRecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            RowPostListBinding rowPostListBinding = RowPostListBinding.inflate(getLayoutInflater());
+            // RowPostListBinding rowPostListBinding = RowPostListBinding.inflate(getLayoutInflater());
+            RowPostListBinding rowPostListBinding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.row_post_list, parent, false);
             PostListMainRecyclerViewHolder postListMainRecyclerViewHolder = new PostListMainRecyclerViewHolder(rowPostListBinding);
 
             return postListMainRecyclerViewHolder;
@@ -100,6 +126,13 @@ public class PostListFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull PostListMainRecyclerViewHolder holder, int position) {
+            // position 번째 ViewModel 객체를 추출한다.
+            PostListItemViewModel postListItemViewModel = postListItemViewModelArrayList.get(position);
+            holder.rowPostListBinding.setPostListItemViewModel(postListItemViewModel);
+
+            postListItemViewModel.textViewRowPostListSubject.setValue("제목 : " + position);
+            postListItemViewModel.textViewRowPostListNickName.setValue("닉네임 : " + position);
+
             holder.rowPostListBinding.textViewRowPostListSubject.setText("제목 : " + position);
             holder.rowPostListBinding.textViewRowPostListNickname.setText("닉네임 : " + position);
 
@@ -110,7 +143,7 @@ public class PostListFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return 100;
+            return postListItemViewModelArrayList.size();
         }
 
         class PostListMainRecyclerViewHolder extends RecyclerView.ViewHolder {

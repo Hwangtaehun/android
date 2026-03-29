@@ -3,6 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="postListViewModel"
+            type="com.example.app03_community.ui.postlist.PostListViewModel" />
+    </data>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -16,7 +23,8 @@
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
             android:minHeight="?attr/actionBarSize"
-            android:theme="@style/Theme.App03_Community.Toolbar" />
+            android:theme="@style/Theme.App03_Community.Toolbar"
+            app:title="@{postListViewModel.toolbarPostListTitle}"/>
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"

@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="postListItemViewModel"
+            type="com.example.app03_community.ui.postlist.PostListItemViewModel" />
+    </data>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -11,7 +18,7 @@
             android:id="@+id/textViewRowPostListSubject"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView"
+            android:text="@{postListItemViewModel.textViewRowPostListSubject}"
             android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
         <TextView
@@ -19,6 +26,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="TextView" />
+            android:text="@{postListItemViewModel.textViewRowPostListNickName}" />
     </LinearLayout>
 </layout>
