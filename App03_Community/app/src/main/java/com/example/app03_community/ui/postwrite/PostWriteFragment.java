@@ -64,7 +64,12 @@ public class PostWriteFragment extends Fragment {
 
         Bitmap bitmap = BitmapFactory.decodeFile(contentUri.getPath());
 
-        fragmentPostWriteBinding.imageViewPostWrite.setImageBitmap(bitmap);
+        int degree = mainActivity.getDegree(contentUri);
+
+        Bitmap bitmap2 = mainActivity.rotateBitmap(bitmap, degree);
+        Bitmap bitmap3 = mainActivity.resizeBitmap(1024, bitmap2);
+
+        fragmentPostWriteBinding.imageViewPostWrite.setImageBitmap(bitmap3);
 
         File file = new File(contentUri.getPath());
         file.delete();

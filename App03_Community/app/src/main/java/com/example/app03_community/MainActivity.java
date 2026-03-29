@@ -4,9 +4,15 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
+import android.content.ContentProvider;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.MediaStore;
@@ -45,6 +51,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.transition.MaterialSharedAxis;
 
 import java.io.File;
+import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity {
     ActivityMainBinding activityMainBinding;
@@ -256,5 +263,60 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    public int getDegree(Uri uri) {
+        ExifInterface exifInterface = null;
+
+        try {
+            if(Build.VERSION.SDK_INT == Build.VERSION_CODES.Q) {
+                Uri photoUri = MediaStore.setRequireOriginal(uri);
+                ContentResolver contentResolver = getContentResolver();
+                InputStream inputStream = contentResolver.openInputStream(photoUri);
+                exifInterface = new ExifInterface(inputStream);
+            } else {
+                exifInterface = new ExifInterface(uri.getPath());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if(exifInterface != null) {
+            int degree = 0;
+            int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, -1);
+
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    degree = 90;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    degree = 180;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    degree = 270;
+                    break;
+            }
+            return degree;
+        } else {
+            return 0;
+        }
+    }
+
+    public Bitmap rotateBitmap(Bitmap bitmap, int degree) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(degree);
+
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+
+        Bitmap result = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, false);
+        return result;
+    }
+
+    public Bitmap resizeBitmap(int targetWidth, Bitmap source) {
+        double ratio = (double) targetWidth / (double) source.getWidth();
+        int targetHeight = (int)(source.getHeight() * ratio);
+        Bitmap result = Bitmap.createScaledBitmap(source, targetWidth, targetHeight, false);
+        return result;
     }
 }
