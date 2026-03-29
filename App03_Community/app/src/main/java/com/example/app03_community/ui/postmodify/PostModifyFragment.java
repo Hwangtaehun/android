@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import android.provider.MediaStore;
@@ -20,6 +21,7 @@ import com.example.app03_community.MainActivity;
 import com.example.app03_community.R;
 import com.example.app03_community.databinding.FragmentPostModifyBinding;
 import com.example.app03_community.ui.postmain.PostMainFragment;
+import com.example.app03_community.ui.postwrite.PostWriteViewModel;
 
 import java.io.File;
 
@@ -28,12 +30,18 @@ public class PostModifyFragment extends Fragment {
     MainActivity mainActivity;
     PostMainFragment postMainFragment;
     Uri contentUri;
+    PostModifyViewModel postModifyViewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        fragmentPostModifyBinding = FragmentPostModifyBinding.inflate(inflater);
+        // fragmentPostModifyBinding = FragmentPostModifyBinding.inflate(inflater);
+        fragmentPostModifyBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_post_modify, container, false);
+        postModifyViewModel = new PostModifyViewModel();
+        fragmentPostModifyBinding.setPostModifyViewModel(postModifyViewModel);
+        fragmentPostModifyBinding.setLifecycleOwner(this);
+
         mainActivity = (MainActivity) getActivity();
         postMainFragment = mainActivity.postMainFragment;
 
@@ -59,7 +67,7 @@ public class PostModifyFragment extends Fragment {
             } else if (itemId == R.id.menuItemPostModifyAlbum) {
                 mainActivity.showAlbum(this);
             } else if (itemId == R.id.menuItemPostModifyDone) {
-                postMainFragment.removerFragment(PostMainFragment.POST_MODIFY_FRAGMENT);
+                processSubmit();
             }
 
             return true;
@@ -67,9 +75,14 @@ public class PostModifyFragment extends Fragment {
     }
 
     public void setContent() {
-        fragmentPostModifyBinding.buttonGroupPostModifyType.check(R.id.buttonPostModifyType2);
-        fragmentPostModifyBinding.inputPostModifySubject.setText("제목입니다.");
-        fragmentPostModifyBinding.inputPostModifyText.setText("내용입니다.");
+//        fragmentPostModifyBinding.buttonGroupPostModifyType.check(R.id.buttonPostModifyType2);
+//        fragmentPostModifyBinding.inputPostModifySubject.setText("제목입니다.");
+//        fragmentPostModifyBinding.inputPostModifyText.setText("내용입니다.");
+
+        postModifyViewModel.buttonGroupPostModifyType.setValue(R.id.buttonPostModifyType3);
+        postModifyViewModel.inputPostModifySubject.setValue("테스트 제목입니다.");
+        postModifyViewModel.inputPostModifyText.setValue("테스트 내용입니다.");
+
         fragmentPostModifyBinding.imageViewPostModify.setImageResource(R.mipmap.ic_launcher);
     }
 
@@ -109,5 +122,27 @@ public class PostModifyFragment extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void processSubmit() {
+        String inputPostModifySubject = postModifyViewModel.inputPostModifySubject.getValue();
+        String inputPostModifyText = postModifyViewModel.inputPostModifyText.getValue();
+
+        if(inputPostModifySubject == null || inputPostModifySubject.trim().length() == 0) {
+            mainActivity.showAlertDialog("제목 입력 오류", "제목을 입력해주세요.", (dialog, which) -> {
+                mainActivity.showSoftInput(fragmentPostModifyBinding.inputPostModifySubject);
+            });
+            return;
+        }
+
+        if(inputPostModifyText == null || inputPostModifyText.trim().length() == 0) {
+            mainActivity.showAlertDialog("내용 입력 오류", "내용을 입력해주세요.", (dialog, which) -> {
+                mainActivity.showSoftInput(fragmentPostModifyBinding.inputPostModifyText);
+            });
+            return;
+        }
+
+        mainActivity.hideSoftInput();
+        postMainFragment.removerFragment(PostMainFragment.POST_MODIFY_FRAGMENT);
     }
 }

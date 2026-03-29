@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="postModifyViewModel"
+            type="com.example.app03_community.ui.postmodify.PostModifyViewModel" />
+    </data>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -40,7 +46,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="text"
-                        android:text="제목"
+                        android:text="@={postModifyViewModel.inputPostModifySubject}"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -57,7 +63,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="text|textMultiLine"
-                        android:text="내용"
+                        android:text="@={postModifyViewModel.inputPostModifyText}"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -66,7 +72,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    app:singleSelection="true">
+                    app:singleSelection="true"
+                    app:selectionRequired="true"
+                    android:checkButtonId="@={postModifyViewModel.buttonGroupPostModifyType}">
 
                     <Button
                         android:id="@+id/buttonPostModifyType1"
