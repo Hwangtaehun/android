@@ -13,6 +13,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,7 +70,7 @@ public class PostWriteFragment extends Fragment {
             } else if(itemId == R.id.menuItemPostWriteAlbum) {
                 mainActivity.showAlbum(this);
             } else if(itemId == R.id.menuItemPostWriteDone) {
-                postMainFragment.replaceFragment(PostMainFragment.POST_READ_FRAGMENT, true, true, null);
+                proceessSubmit();
             }
 
             return true;
@@ -123,6 +124,32 @@ public class PostWriteFragment extends Fragment {
     public void setContent() {
         postWriteViewModel.inputPostWriteSubject.setValue("");
         postWriteViewModel.inputPostWriteText.setValue("");
-        postWriteViewModel.buttonGroupPostWriteType.setValue(R.id.buttonPostModifyType3);
+        postWriteViewModel.buttonGroupPostWriteType.setValue(R.id.buttonPostWriteType1);
+    }
+
+    public void proceessSubmit() {
+        // int test1 = postWriteViewModel.buttonGroupPostWriteType.getValue();
+        // Log.d("test1111", test1 + "");
+
+        String inputPostWriteSubject = postWriteViewModel.inputPostWriteSubject.getValue();
+        String inputPostWriteText = postWriteViewModel.inputPostWriteText.getValue();
+
+        if(inputPostWriteSubject == null || inputPostWriteSubject.trim().length() == 0) {
+            mainActivity.showAlertDialog("제목을 입력 오류", "제목을 입력해주세요.", (dialog, which) -> {
+                mainActivity.showSoftInput(fragmentPostWriteBinding.inputPostWriteSubject);
+            });
+
+            return;
+        }
+
+        if(inputPostWriteText == null || inputPostWriteText.trim().length() == 0) {
+            mainActivity.showAlertDialog("내용 입력 오류", "내용을 입력해주세요", (dialog, which) -> {
+                mainActivity.showSoftInput(fragmentPostWriteBinding.inputPostWriteText);
+            });
+            return;
+        }
+
+        mainActivity.hideSoftInput();
+        postMainFragment.replaceFragment(PostMainFragment.POST_READ_FRAGMENT, true, true, null);
     }
 }

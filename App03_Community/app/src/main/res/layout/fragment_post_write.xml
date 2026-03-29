@@ -74,7 +74,7 @@
                     android:layout_marginTop="10dp"
                     app:singleSelection="true"
                     app:selectionRequired="true"
-                    android:checkedButtonId="@{postWriteViewModel.buttonGroupPostWriteType}">
+                    android:checkedButtonId="@={postWriteViewModel.buttonGroupPostWriteType}">
 
                     <Button
                         android:id="@+id/buttonPostWriteType1"
