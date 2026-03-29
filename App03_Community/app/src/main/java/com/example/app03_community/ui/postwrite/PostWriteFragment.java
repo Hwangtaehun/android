@@ -1,12 +1,17 @@
 package com.example.app03_community.ui.postwrite;
 
+import android.content.ContentResolver;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.ImageDecoder;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,7 +55,7 @@ public class PostWriteFragment extends Fragment {
             if(itemId == R.id.menuItemPostWriteCamera) {
                 mainActivity.showCamera(this);
             } else if(itemId == R.id.menuItemPostWriteAlbum) {
-
+                mainActivity.showAlbum(this);
             } else if(itemId == R.id.menuItemPostWriteDone) {
                 postMainFragment.replaceFragment(PostMainFragment.POST_READ_FRAGMENT, true, true, null);
             }
@@ -73,5 +78,33 @@ public class PostWriteFragment extends Fragment {
 
         File file = new File(contentUri.getPath());
         file.delete();
+    }
+
+    public void  setAlbumUri(Uri uri) {
+        ContentResolver contentResolver = mainActivity.getContentResolver();
+
+        try {
+            if(uri != null) {
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    ImageDecoder.Source source = ImageDecoder.createSource(contentResolver, uri);
+                    Bitmap bitmap = ImageDecoder.decodeBitmap(source);
+                    fragmentPostWriteBinding.imageViewPostWrite.setImageBitmap(bitmap);
+                } else {
+                    Cursor cursor = contentResolver.query(uri, null, null, null, null);
+
+                    if(cursor != null) {
+                      cursor.moveToNext();
+
+                      int index = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
+                      String source = cursor.getString(index);
+
+                      Bitmap bitmap = BitmapFactory.decodeFile(source);
+                      fragmentPostWriteBinding.imageViewPostWrite.setImageBitmap(bitmap);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

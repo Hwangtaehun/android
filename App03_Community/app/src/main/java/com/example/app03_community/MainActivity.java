@@ -1,5 +1,6 @@
 package com.example.app03_community;
 
+import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
@@ -28,6 +29,7 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
@@ -66,9 +68,15 @@ public class MainActivity extends AppCompatActivity {
     public static final String POST_MAIN_FRAGMENT = "PostMainFragment";
 
     ActivityResultLauncher<Intent> cameraLaunchar;
+    ActivityResultLauncher<Intent> albumLauncher;
     String filePath;
     Uri contentUri;
     Fragment pictureFragment;
+
+    String [] permissionList = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.ACCESS_FINE_LOCATION
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,11 +135,17 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        requestPermissions(permissionList, 0);
+
         filePath = getExternalFilesDir(null).toString();
 
         CameraActivityCallback cameraActivityCallback = new CameraActivityCallback();
         ActivityResultContracts.StartActivityForResult cameraContract = new ActivityResultContracts.StartActivityForResult();
         cameraLaunchar = registerForActivityResult(cameraContract, cameraActivityCallback);
+
+        AlbumActivityCallback albumActivityCallback = new AlbumActivityCallback();
+        ActivityResultContracts.StartActivityForResult albumContract = new ActivityResultContracts.StartActivityForResult();
+        albumLauncher = registerForActivityResult(albumContract, albumActivityCallback);
 
         replaceFragment(LOGIN_FRAGMENT, false, false, null);
     }
@@ -251,6 +265,16 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void showAlbum(Fragment fragment){
+        pictureFragment = fragment;
+
+        Intent albumIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        albumIntent.setType("image/*");
+        String [] mimeType = {"image/*"};
+        albumIntent.putExtra(Intent.EXTRA_MIME_TYPES, mimeType);
+        albumLauncher.launch(albumIntent);
+    }
+
     class CameraActivityCallback implements ActivityResultCallback<ActivityResult> {
         @Override
         public void onActivityResult(ActivityResult o) {
@@ -318,5 +342,25 @@ public class MainActivity extends AppCompatActivity {
         int targetHeight = (int)(source.getHeight() * ratio);
         Bitmap result = Bitmap.createScaledBitmap(source, targetWidth, targetHeight, false);
         return result;
+    }
+
+    class AlbumActivityCallback implements ActivityResultCallback<ActivityResult>{
+        @Override
+        public void onActivityResult(ActivityResult o) {
+            int resultCode = o.getResultCode();
+
+            if(resultCode == RESULT_OK) {
+                try {
+                    Intent data = o.getData();
+                    Uri uri = data.getData();
+                    if(pictureFragment.getClass() == PostWriteFragment.class) {
+                        PostWriteFragment postWriteFragment = (PostWriteFragment) pictureFragment;
+                        postWriteFragment.setAlbumUri(uri);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }
