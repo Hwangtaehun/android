@@ -2,6 +2,7 @@ package com.example.app03_community.ui.postread;
 
 import android.os.Bundle;
 
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -17,12 +18,18 @@ public class PostReadFragment extends Fragment {
     FragmentPostReadBinding fragmentPostReadBinding;
     MainActivity mainActivity;
     PostMainFragment postMainFragment;
+    PostReadViewModel postReadViewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        fragmentPostReadBinding = FragmentPostReadBinding.inflate(inflater);
+        //fragmentPostReadBinding = FragmentPostReadBinding.inflate(inflater);
+        fragmentPostReadBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_post_read, container, false);
+        postReadViewModel = new PostReadViewModel();
+        fragmentPostReadBinding.setPostReadViewModel(postReadViewModel);
+        fragmentPostReadBinding.setLifecycleOwner(this);
+
         mainActivity = (MainActivity) getActivity();
         postMainFragment = mainActivity.postMainFragment;
 
@@ -56,11 +63,17 @@ public class PostReadFragment extends Fragment {
     }
 
     public void setContent() {
-        fragmentPostReadBinding.inputPostReadType.setText("자유게시판");
-        fragmentPostReadBinding.inputPostReadSubject.setText("제목입니다.");
-        fragmentPostReadBinding.inputPostReadNickname.setText("홍길동");
-        fragmentPostReadBinding.inputPostReadData.setText("2000-01-01");
-        fragmentPostReadBinding.inputPostReadText.setText("내용입니다.");
+//        fragmentPostReadBinding.inputPostReadType.setText("자유게시판");
+//        fragmentPostReadBinding.inputPostReadSubject.setText("제목입니다.");
+//        fragmentPostReadBinding.inputPostReadNickname.setText("홍길동");
+//        fragmentPostReadBinding.inputPostReadData.setText("2000-01-01");
+//        fragmentPostReadBinding.inputPostReadText.setText("내용입니다.");
+        postReadViewModel.inputPostReadType.setValue("테스트 게시판");
+        postReadViewModel.inputPostReadSubject.setValue("테스트 글제목");
+        postReadViewModel.inputPostReadNickname.setValue("테스트 작성자");
+        postReadViewModel.inputPostReadData.setValue("2222-11-11");
+        postReadViewModel.inputPostReadText.setValue("테스트 글내용");
+
         fragmentPostReadBinding.imageViewPostRead.setImageResource(R.mipmap.ic_launcher);
     }
 }
