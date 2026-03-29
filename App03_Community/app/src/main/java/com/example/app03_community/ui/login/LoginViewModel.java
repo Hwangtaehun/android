@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel;
 public class LoginViewModel extends ViewModel {
     public MutableLiveData<String> inputLoginUserId = new MutableLiveData<>();
     public MutableLiveData<String> inputLoginUserPw = new MutableLiveData<>();
-    public MutableLiveData<Boolean> checkBoxLoginAuto =  new MutableLiveData<>();
-
-
+    public MutableLiveData<Boolean> checkBoxLoginAuto = new MutableLiveData<>();
 }
+

@@ -20,7 +20,6 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbarLogin"
             android:layout_width="match_parent"
-
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
             android:minHeight="?attr/actionBarSize"
@@ -55,6 +54,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
                     android:hint="비밀번호"
                     app:endIconMode="password_toggle"
                     app:startIconDrawable="@drawable/key_24px">
@@ -100,7 +100,6 @@
                     android:layout_marginTop="10dp"
                     android:text="회원가입"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

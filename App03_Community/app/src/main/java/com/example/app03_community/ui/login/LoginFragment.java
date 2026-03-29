@@ -14,6 +14,7 @@ import com.example.app03_community.R;
 import com.example.app03_community.databinding.FragmentLoginBinding;
 
 public class LoginFragment extends Fragment {
+
     FragmentLoginBinding fragmentLoginBinding;
     MainActivity mainActivity;
     LoginViewModel loginViewModel;
@@ -37,49 +38,52 @@ public class LoginFragment extends Fragment {
         return fragmentLoginBinding.getRoot();
     }
 
-    public void setToolbar() {
+    public void setToolbar(){
         fragmentLoginBinding.toolbarLogin.setTitle("로그인");
     }
 
-    public void setButton() {
-        fragmentLoginBinding.buttonLoginJoin.setOnClickListener(v -> {
-            processSubmit();
+    public void setButton(){
+        fragmentLoginBinding.buttonLoginJoin.setOnClickListener(view -> {
+            mainActivity.replaceFragment(MainActivity.JOIN_FRAGMENT, true, true, null);
         });
 
-        fragmentLoginBinding.buttonLoginSubmit.setOnClickListener(v -> {
-            mainActivity.replaceFragment(MainActivity.POST_MAIN_FRAGMENT, false, true, null);
+        fragmentLoginBinding.buttonLoginSubmit.setOnClickListener(view -> {
+            processSubmit();
+
         });
     }
 
-    public void setContent() {
+    public void setContent(){
         loginViewModel.inputLoginUserId.setValue("");
         loginViewModel.inputLoginUserPw.setValue("");
         loginViewModel.checkBoxLoginAuto.setValue(false);
 
-        fragmentLoginBinding.inputLoginUserPw.setOnEditorActionListener((v, actionId, event) -> {
+        fragmentLoginBinding.inputLoginUserPw.setOnEditorActionListener((textView, i, keyEvent) -> {
             processSubmit();
             return true;
         });
     }
 
-    public void processSubmit() {
+    public void processSubmit(){
+
         String inputLoginUserId = loginViewModel.inputLoginUserId.getValue();
         String inputLoginUserPw = loginViewModel.inputLoginUserPw.getValue();
 
-        if(inputLoginUserId == null || inputLoginUserId.trim().length() == 0) {
-            mainActivity.showAlertDialog("아이디 입력 오류", "아이디를 입력해주세요.", (dialog, which) -> {
+        if(inputLoginUserId == null || inputLoginUserId.trim().length() == 0){
+            mainActivity.showAlertDialog("아이디 입력 오류", "아이디를 입력해주세요", (dialogInterface, i) -> {
                 mainActivity.showSoftInput(fragmentLoginBinding.inputLoginUserId);
             });
             return;
         }
 
-        if(inputLoginUserPw == null || inputLoginUserPw.trim().length() == 0) {
-            mainActivity.showAlertDialog("비밀번호 입력 오류", "비밀번호를 입력해주세요.", (dialog, which) -> {
+        if(inputLoginUserPw == null || inputLoginUserPw.trim().length() == 0){
+            mainActivity.showAlertDialog("비밀번호 입력 오류", "비밀번호를 입력해주세요", (dialogInterface, i) -> {
                 mainActivity.showSoftInput(fragmentLoginBinding.inputLoginUserPw);
             });
             return;
         }
 
-        mainActivity.replaceFragment(MainActivity.JOIN_FRAGMENT, true, true, null);
+        mainActivity.hideSoftInput();
+        mainActivity.replaceFragment(MainActivity.POST_MAIN_FRAGMENT, false, true, null);
     }
 }
