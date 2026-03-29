@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import android.provider.MediaStore;
@@ -29,14 +30,25 @@ public class PostWriteFragment extends Fragment {
     PostMainFragment postMainFragment;
     Uri contentUri;
 
+    PostWriteViewModel postWriteViewModel;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        fragmentPostWriteBinding = FragmentPostWriteBinding.inflate(inflater);
+        // fragmentPostWriteBinding = FragmentPostWriteBinding.inflate(inflater);
+        fragmentPostWriteBinding = DataBindingUtil.inflate(inflater,
+                R.layout.fragment_post_write,
+                container,
+                false);
+        postWriteViewModel = new PostWriteViewModel();
+        fragmentPostWriteBinding.setPostWriteViewModel(postWriteViewModel);
+        fragmentPostWriteBinding.setLifecycleOwner(this);
+
         mainActivity = (MainActivity) getActivity();
         postMainFragment = mainActivity.postMainFragment;
 
         setToolbar();
+        setContent();
 
         return fragmentPostWriteBinding.getRoot();
     }
@@ -106,5 +118,11 @@ public class PostWriteFragment extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void setContent() {
+        postWriteViewModel.inputPostWriteSubject.setValue("");
+        postWriteViewModel.inputPostWriteText.setValue("");
+        postWriteViewModel.buttonGroupPostWriteType.setValue(R.id.buttonPostModifyType3);
     }
 }
