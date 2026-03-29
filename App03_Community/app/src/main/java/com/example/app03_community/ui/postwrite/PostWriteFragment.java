@@ -1,5 +1,8 @@
 package com.example.app03_community.ui.postwrite;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -13,10 +16,13 @@ import com.example.app03_community.R;
 import com.example.app03_community.databinding.FragmentPostWriteBinding;
 import com.example.app03_community.ui.postmain.PostMainFragment;
 
+import java.io.File;
+
 public class PostWriteFragment extends Fragment {
     FragmentPostWriteBinding fragmentPostWriteBinding;
     MainActivity mainActivity;
     PostMainFragment postMainFragment;
+    Uri contentUri;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,7 +48,7 @@ public class PostWriteFragment extends Fragment {
             int itemId = item.getItemId();
 
             if(itemId == R.id.menuItemPostWriteCamera) {
-
+                mainActivity.showCamera(this);
             } else if(itemId == R.id.menuItemPostWriteAlbum) {
 
             } else if(itemId == R.id.menuItemPostWriteDone) {
@@ -51,5 +57,16 @@ public class PostWriteFragment extends Fragment {
 
             return true;
         });
+    }
+
+    public void setPictureUri(Uri contentUri) {
+        this.contentUri = contentUri;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(contentUri.getPath());
+
+        fragmentPostWriteBinding.imageViewPostWrite.setImageBitmap(bitmap);
+
+        File file = new File(contentUri.getPath());
+        file.delete();
     }
 }

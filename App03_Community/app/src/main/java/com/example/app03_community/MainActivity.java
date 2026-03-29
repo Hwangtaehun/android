@@ -5,8 +5,11 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.View;
@@ -15,8 +18,13 @@ import android.view.animation.AnticipateInterpolator;
 import android.view.inputmethod.InputMethodManager;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 import androidx.core.graphics.Insets;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.core.splashscreen.SplashScreenViewProvider;
@@ -32,8 +40,11 @@ import com.example.app03_community.ui.adduserinfo.AddUserInfoFragment;
 import com.example.app03_community.ui.join.JoinFragment;
 import com.example.app03_community.ui.login.LoginFragment;
 import com.example.app03_community.ui.postmain.PostMainFragment;
+import com.example.app03_community.ui.postwrite.PostWriteFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.transition.MaterialSharedAxis;
+
+import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
     ActivityMainBinding activityMainBinding;
@@ -46,6 +57,11 @@ public class MainActivity extends AppCompatActivity {
     public static final String JOIN_FRAGMENT = "JoinFragment";
     public static final String ADD_USER_INFO_FRAGMENT = "AddUserInfoFragment";
     public static final String POST_MAIN_FRAGMENT = "PostMainFragment";
+
+    ActivityResultLauncher<Intent> cameraLaunchar;
+    String filePath;
+    Uri contentUri;
+    Fragment pictureFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +119,12 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        filePath = getExternalFilesDir(null).toString();
+
+        CameraActivityCallback cameraActivityCallback = new CameraActivityCallback();
+        ActivityResultContracts.StartActivityForResult cameraContract = new ActivityResultContracts.StartActivityForResult();
+        cameraLaunchar = registerForActivityResult(cameraContract, cameraActivityCallback);
 
         replaceFragment(LOGIN_FRAGMENT, false, false, null);
     }
@@ -203,5 +225,36 @@ public class MainActivity extends AppCompatActivity {
         builder.setIcon(R.drawable.warning_24px);
         builder.setPositiveButton("확인", listener);
         builder.show();
+    }
+
+    public void showCamera(Fragment fragment) {
+        pictureFragment = fragment;
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        long now = System.currentTimeMillis();
+        String file_name = "/temp_" + now + ".jpg";
+        String pic_path = filePath + "/" + file_name;
+        File file = new File(pic_path);
+
+        contentUri = FileProvider.getUriForFile(this, "com.example.app03_community.file_provider", file);
+
+        if(contentUri != null) {
+            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, contentUri);
+            cameraLaunchar.launch(cameraIntent);
+        }
+    }
+
+    class CameraActivityCallback implements ActivityResultCallback<ActivityResult> {
+        @Override
+        public void onActivityResult(ActivityResult o) {
+            int resultCode = o.getResultCode();
+
+            if(resultCode == RESULT_OK) {
+                if(pictureFragment.getClass() == PostWriteFragment.class) {
+                    PostWriteFragment postWriteFragment = (PostWriteFragment) pictureFragment;
+                    postWriteFragment.setPictureUri(contentUri);
+                }
+            }
+        }
     }
 }
