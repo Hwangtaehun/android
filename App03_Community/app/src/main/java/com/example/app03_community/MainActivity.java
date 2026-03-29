@@ -48,6 +48,7 @@ import com.example.app03_community.ui.adduserinfo.AddUserInfoFragment;
 import com.example.app03_community.ui.join.JoinFragment;
 import com.example.app03_community.ui.login.LoginFragment;
 import com.example.app03_community.ui.postmain.PostMainFragment;
+import com.example.app03_community.ui.postmodify.PostModifyFragment;
 import com.example.app03_community.ui.postwrite.PostWriteFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.transition.MaterialSharedAxis;
@@ -284,6 +285,9 @@ public class MainActivity extends AppCompatActivity {
                 if(pictureFragment.getClass() == PostWriteFragment.class) {
                     PostWriteFragment postWriteFragment = (PostWriteFragment) pictureFragment;
                     postWriteFragment.setPictureUri(contentUri);
+                } else if (pictureFragment.getClass() == PostModifyFragment.class) {
+                    PostModifyFragment postModifyFragment = (PostModifyFragment) pictureFragment;
+                    postModifyFragment.setPictureUri(contentUri);
                 }
             }
         }
@@ -356,6 +360,9 @@ public class MainActivity extends AppCompatActivity {
                     if(pictureFragment.getClass() == PostWriteFragment.class) {
                         PostWriteFragment postWriteFragment = (PostWriteFragment) pictureFragment;
                         postWriteFragment.setAlbumUri(uri);
+                    } else if(pictureFragment.getClass() == PostModifyFragment.class) {
+                        PostModifyFragment postModifyFragment = (PostModifyFragment) pictureFragment;
+                        postModifyFragment.setAlbumUri(uri);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
