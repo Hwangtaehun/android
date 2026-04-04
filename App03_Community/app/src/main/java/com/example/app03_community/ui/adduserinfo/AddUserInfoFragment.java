@@ -16,6 +16,7 @@ import com.example.app03_community.databinding.FragmentAddUserInfoBinding;
 import com.example.app03_community.model.UserInfoModel;
 import com.example.app03_community.repository.UserInfoRepository;
 import com.google.android.material.checkbox.MaterialCheckBox;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 public class AddUserInfoFragment extends Fragment {
@@ -98,7 +99,17 @@ public class AddUserInfoFragment extends Fragment {
         UserInfoRepository.getUserInfoSequence(o -> {
             DocumentSnapshot documentSnapshot = (DocumentSnapshot) o;
             int userSequence = documentSnapshot.getLong("value").intValue();
-            Log.d("test1234", userSequence + "");
+            userSequence++;
+            final int tempUserSequence = userSequence;
+            UserInfoRepository.setUserInfoSequence(userSequence, o1 -> {
+                userInfoModel.setUserIdx(tempUserSequence);
+                UserInfoRepository.addUserInfo(userInfoModel, o2 -> {
+                    Snackbar snackbar = Snackbar.make(fragmentAddUserInfoBinding.buttonAddUserInfoSubmit,
+                                                "가입이 완료되었습니다.", Snackbar.LENGTH_SHORT);
+                    snackbar.show();
+                    mainActivity.removeFragment(MainActivity.JOIN_FRAGMENT);
+                });
+            });
         });
 
         // mainActivity.removeFragment(MainActivity.JOIN_FRAGMENT);
