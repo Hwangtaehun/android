@@ -1,5 +1,6 @@
 package com.example.app03_community.ui.login;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.databinding.DataBindingUtil;
@@ -12,6 +13,12 @@ import android.view.ViewGroup;
 import com.example.app03_community.MainActivity;
 import com.example.app03_community.R;
 import com.example.app03_community.databinding.FragmentLoginBinding;
+import com.example.app03_community.repository.UserInfoRepository;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.List;
 
 public class LoginFragment extends Fragment {
 
@@ -83,7 +90,43 @@ public class LoginFragment extends Fragment {
             return;
         }
 
+        UserInfoRepository.checkLoginUser(inputLoginUserId, o -> {
+            QuerySnapshot querySnapshot = (QuerySnapshot) o;
+            List<DocumentSnapshot> documentSnapshotList = querySnapshot.getDocuments();
+
+            if(documentSnapshotList.size() == 0) {
+                mainActivity.showAlertDialog("아이디 입력 오류", "입력하신 아이디가 존재하지 않습니다.",
+                        (dialog, which) -> {
+                            fragmentLoginBinding.inputLoginUserId.setText("");
+                            mainActivity.showSoftInput(fragmentLoginBinding.inputLoginUserId);
+                        });
+            } else {
+                DocumentSnapshot documentSnapshot = documentSnapshotList.get(0);
+                String loginUserPw = documentSnapshot.getString("userPw");
+
+                if(inputLoginUserPw.equals(loginUserPw) ==  false) {
+                    mainActivity.showAlertDialog("비밀번호 입력 오류", "비밀번호를 잘못 입력하였습니다.",
+                    (dialog, which) -> {
+                        fragmentLoginBinding.inputLoginUserPw.setText("");
+                        mainActivity.showSoftInput(fragmentLoginBinding.inputLoginUserPw);
+                    });
+                } else {
+                    Snackbar.make(fragmentLoginBinding.getRoot(), "로그인 되었습니다.", Snackbar.LENGTH_SHORT).show();
+                    mainActivity.loginUserIdx = documentSnapshot.getLong("userIdx").intValue();
+
+                    if(fragmentLoginBinding.checkBoxLoginAuto.isChecked() == true) {
+                        SharedPreferences sharedPreferences = mainActivity.getSharedPreferences("AutoLogin", MainActivity.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putInt("loginUserIdx", mainActivity.loginUserIdx);
+                        editor.apply();
+                    }
+
+                    mainActivity.replaceFragment(MainActivity.POST_MAIN_FRAGMENT, false, true, null);
+                }
+            }
+        });
+
         mainActivity.hideSoftInput();
-        mainActivity.replaceFragment(MainActivity.POST_MAIN_FRAGMENT, false, true, null);
+        //mainActivity.replaceFragment(MainActivity.POST_MAIN_FRAGMENT, false, true, null);
     }
 }

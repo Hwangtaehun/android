@@ -9,6 +9,7 @@ import android.content.ContentProvider;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
@@ -73,6 +74,8 @@ public class MainActivity extends AppCompatActivity {
     String filePath;
     Uri contentUri;
     Fragment pictureFragment;
+
+    public int loginUserIdx;
 
     String [] permissionList = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -148,7 +151,14 @@ public class MainActivity extends AppCompatActivity {
         ActivityResultContracts.StartActivityForResult albumContract = new ActivityResultContracts.StartActivityForResult();
         albumLauncher = registerForActivityResult(albumContract, albumActivityCallback);
 
-        replaceFragment(LOGIN_FRAGMENT, false, false, null);
+        SharedPreferences sharedPreferences = getSharedPreferences("AutoLogin", MODE_PRIVATE);
+        loginUserIdx = sharedPreferences.getInt("loginUserIdx", -1);
+
+        if(loginUserIdx == -1) {
+            replaceFragment(LOGIN_FRAGMENT, false, false, null);
+        } else {
+            replaceFragment(POST_MAIN_FRAGMENT, false, false, null);
+        }
     }
 
 //    class SplashScreenListener implements SplashScreen.OnExitAnimationListener {

@@ -7,6 +7,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 import java.util.HashMap;
 
@@ -37,5 +38,13 @@ public class UserInfoRepository {
         CollectionReference collectionReference = firebaseFirestore.collection("UserInfo");
         Task<DocumentReference> documentReferenceTask = collectionReference.add(userInfoModel);
         documentReferenceTask.addOnSuccessListener(onSuccessListener);
+    }
+
+    // 로그인 처리
+    public static void checkLoginUser(String loginUserId, OnSuccessListener onSuccessListener) {
+        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+        CollectionReference collectionReference = firebaseFirestore.collection("UserInfo");
+        Query query = collectionReference.whereEqualTo("userId", loginUserId);
+        query.get().addOnSuccessListener(onSuccessListener);
     }
 }
