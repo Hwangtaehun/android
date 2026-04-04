@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import com.example.app03_community.MainActivity;
 import com.example.app03_community.R;
 import com.example.app03_community.databinding.FragmentAddUserInfoBinding;
+import com.example.app03_community.model.UserInfoModel;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
 public class AddUserInfoFragment extends Fragment {
@@ -89,6 +91,48 @@ public class AddUserInfoFragment extends Fragment {
             return;
         }
 
+        UserInfoModel userInfoModel = setUserData();
+
         mainActivity.removeFragment(MainActivity.JOIN_FRAGMENT);
+    }
+
+    public UserInfoModel setUserData() {
+        Bundle dataBundle = getArguments();
+
+        String userId = dataBundle.getString("inputJoinUserId");
+        String userPw = dataBundle.getString("inputJoinUserPw");
+        String nickName = addUserInfoViewModel.inputAddUserInfoNickname.getValue();
+        int age = Integer.parseInt(addUserInfoViewModel.inputAddUserInfoAge.getValue());
+        boolean hobby1 = addUserInfoViewModel.checkBoxAdduserInfo1.getValue();
+        boolean hobby2 = addUserInfoViewModel.checkBoxAdduserInfo2.getValue();
+        boolean hobby3 = addUserInfoViewModel.checkBoxAdduserInfo3.getValue();
+        boolean hobby4 = addUserInfoViewModel.checkBoxAdduserInfo4.getValue();
+        boolean hobby5 = addUserInfoViewModel.checkBoxAdduserInfo5.getValue();
+        boolean hobby6 = addUserInfoViewModel.checkBoxAdduserInfo6.getValue();
+
+//        Log.d("test1234", "userId : " + userId);
+//        Log.d("test1234", "userPw : " + userPw);
+//        Log.d("test1234", "nickName : " + nickName);
+//        Log.d("test1234", "age : " + age);
+//        Log.d("test1234", "hobby1 : " + hobby1);
+//        Log.d("test1234", "hobby2 : " + hobby2);
+//        Log.d("test1234", "hobby3 : " + hobby3);
+//        Log.d("test1234", "hobby4 : " + hobby4);
+//        Log.d("test1234", "hobby5 : " + hobby5);
+//        Log.d("test1234", "hobby6 : " + hobby6);
+
+        UserInfoModel userInfoModel = new UserInfoModel();
+        userInfoModel.setUserId(userId);
+        userInfoModel.setUserPw(userPw);
+        userInfoModel.setNickName(nickName);
+        userInfoModel.setAge(age);
+        userInfoModel.setHobby1(hobby1);
+        userInfoModel.setHobby2(hobby2);
+        userInfoModel.setHobby3(hobby3);
+        userInfoModel.setHobby4(hobby4);
+        userInfoModel.setHobby5(hobby5);
+        userInfoModel.setHobby6(hobby6);
+
+        return userInfoModel;
     }
 }

@@ -200,6 +200,11 @@ public class MainActivity extends AppCompatActivity {
                 newFragment.setEnterTransition(new MaterialSharedAxis(MaterialSharedAxis.X, true));
                 newFragment.setReturnTransition(new MaterialSharedAxis(MaterialSharedAxis.X, false));
             }
+
+            if(bundle != null) {
+                newFragment.setArguments(bundle);
+            }
+
             fragmentTransaction.replace(R.id.mainContainer, newFragment);
 
             if(addToBackStack == true) {

@@ -124,6 +124,10 @@ public class JoinFragment extends Fragment {
              return;
          }
 
-        mainActivity.replaceFragment(MainActivity.ADD_USER_INFO_FRAGMENT, true, true, null);
+         Bundle newbundle = new Bundle();
+         newbundle.putString("inputJoinUserId", inputJoinUserId);
+         newbundle.putString("inputJoinUserPw", inputJoinUserPw);
+
+        mainActivity.replaceFragment(MainActivity.ADD_USER_INFO_FRAGMENT, true, true, newbundle);
     }
 }
