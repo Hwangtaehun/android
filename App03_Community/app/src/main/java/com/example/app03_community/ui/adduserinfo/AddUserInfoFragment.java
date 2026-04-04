@@ -14,7 +14,9 @@ import com.example.app03_community.MainActivity;
 import com.example.app03_community.R;
 import com.example.app03_community.databinding.FragmentAddUserInfoBinding;
 import com.example.app03_community.model.UserInfoModel;
+import com.example.app03_community.repository.UserInfoRepository;
 import com.google.android.material.checkbox.MaterialCheckBox;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 public class AddUserInfoFragment extends Fragment {
     FragmentAddUserInfoBinding fragmentAddUserInfoBinding;
@@ -93,7 +95,13 @@ public class AddUserInfoFragment extends Fragment {
 
         UserInfoModel userInfoModel = setUserData();
 
-        mainActivity.removeFragment(MainActivity.JOIN_FRAGMENT);
+        UserInfoRepository.getUserInfoSequence(o -> {
+            DocumentSnapshot documentSnapshot = (DocumentSnapshot) o;
+            int userSequence = documentSnapshot.getLong("value").intValue();
+            Log.d("test1234", userSequence + "");
+        });
+
+        // mainActivity.removeFragment(MainActivity.JOIN_FRAGMENT);
     }
 
     public UserInfoModel setUserData() {
