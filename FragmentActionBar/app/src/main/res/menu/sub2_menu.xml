@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/sub2_item1"
+        android:icon="@android:drawable/ic_menu_always_landscape_portrait"
+        android:title="Sub2_Item1"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/sub2_item2"
+        android:icon="@android:drawable/ic_menu_call"
+        android:title="Sub2_Item2"
+        app:showAsAction="always" />
+</menu>
